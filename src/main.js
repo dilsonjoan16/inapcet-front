@@ -20,6 +20,10 @@ import router from "./router/index";
 import PaperDashboard from "./plugins/paperDashboard";
 import "vue-notifyjs/themes/default.css";
 
+// import "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/js/bootstrap.min.js";
+
 Vue.use(PaperDashboard);
 
 /* eslint-disable no-new */

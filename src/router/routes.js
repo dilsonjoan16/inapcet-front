@@ -11,6 +11,16 @@ import Maps from "@/pages/Maps.vue";
 import Typography from "@/pages/Typography.vue";
 import TableList from "@/pages/TableList.vue";
 
+import UploadMenu from "@/pages/UploadMenu.vue";
+
+// Paginas de Ingreso, Registro y Recuperacion de Clave o Codigo
+import Login from "@/pages/Ingreso/Login.vue";
+import Register from "@/pages/Ingreso/Register.vue";
+import Recovery from "@/pages/Ingreso/Recovery.vue";
+
+// Midleware de seguridad
+import Guard from "@/services/auth.js";
+
 const routes = [
   {
     path: "/",
@@ -51,10 +61,31 @@ const routes = [
         path: "table-list",
         name: "table-list",
         component: TableList
+      },
+      {
+        path: "upload-menu",
+        name: "UploadMenu",
+        component:UploadMenu
       }
-    ]
+    ],
+    beforeEnter: Guard.auth
   },
-  { path: "*", component: NotFound }
+  { path: "*", component: NotFound },
+  {
+    path: "/login",
+    name: "login",
+    component: Login
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: Register
+  },
+  {
+    path: "/recovery",
+    name: "recovery",
+    component: Recovery
+  }
 ];
 
 /**

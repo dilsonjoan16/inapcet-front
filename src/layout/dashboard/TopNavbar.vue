@@ -29,11 +29,11 @@
             <a class="dropdown-item" href="#">Notification 4</a>
             <a class="dropdown-item" href="#">Another notification</a>
           </drop-down>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="ti-settings"></i>
+          <li class="nav-item" @click.prevent="logout()">
+            <a style="cursor:pointer" class="nav-link">
+              <i class="ti-arrow-circle-left"></i>
               <p>
-                Settings
+                Cerrar Sesion
               </p>
             </a>
           </li>
@@ -42,6 +42,7 @@
     </div></nav>
 </template>
 <script>
+import axios from "axios"
 export default {
   computed: {
     routeName() {
@@ -69,6 +70,15 @@ export default {
     },
     hideSidebar() {
       this.$sidebar.displaySidebar(false);
+    },
+    async logout() {
+      await axios.get('http://127.0.0.1:8000/api/usuarios/logout',{
+        headers:{
+          "Authorization": "Bearer "+sessionStorage.getItem('token')
+        }
+      }).then(response => {
+        this.$router.push("/login")
+      })
     }
   }
 };
