@@ -11,7 +11,13 @@ import Maps from "@/pages/Maps.vue";
 import Typography from "@/pages/Typography.vue";
 import TableList from "@/pages/TableList.vue";
 
-import UploadMenu from "@/pages/UploadMenu.vue";
+import UploadMenu from "@/pages/UploadFiles/UploadMenu.vue";
+import UploadForm from "@/pages/UploadFiles/UploadForm.vue";
+import UploadEdit from "@/pages/UploadFiles/UploadEdit.vue";
+import UploadTrashed from "@/pages/UploadFiles/UploadTrashed.vue";
+import UploadSingle from "@/pages/UploadFiles/UploadSingle.vue";
+import UploadDepartament from "@/pages/UploadFiles/UploadDepartament.vue";
+import UploadTrashedForm from "@/pages/UploadFiles/UploadTrashedForm.vue";
 
 // Paginas de Ingreso, Registro y Recuperacion de Clave o Codigo
 import Login from "@/pages/Ingreso/Login.vue";
@@ -64,8 +70,38 @@ const routes = [
       },
       {
         path: "upload-menu",
-        name: "UploadMenu",
-        component:UploadMenu
+        name: "upload-menu",
+        component: UploadMenu
+      },
+      {
+        path: "upload-form",
+        name: "upload-form",
+        component: UploadForm
+      },
+      {
+        path: "upload-edit",
+        name: "upload-edit",
+        component: UploadEdit
+      },
+      {
+        path: "upload-trashed",
+        name: "upload-trashed",
+        component: UploadTrashed
+      },
+      {
+        path: "upload-single",
+        name: "upload-single",
+        component: UploadSingle
+      },
+      {
+        path: "upload-departament",
+        name: "upload-departament",
+        component: UploadDepartament
+      },
+      {
+        path: "upload-trashed-form",
+        name: "upload-trashed-form",
+        component: UploadTrashedForm
       }
     ],
     beforeEnter: Guard.auth

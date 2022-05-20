@@ -9,8 +9,13 @@
         <sidebar-link to="/icons" name="Icons" icon="ti-pencil-alt2"/>
         <sidebar-link to="/maps" name="Map" icon="ti-map"/>
         <sidebar-link to="/notifications" name="Notifications" icon="ti-bell"/>
-        <sidebar-link to="/upload-menu" name="UploadMenu" icon="ti-folder"/>
+        <sidebar-link to="/upload-menu" name="UploadMenu" icon="ti-archive"/>
+        <sidebar-link to="/upload-trashed" name="UploadTrashed" icon="ti-package"/>
+        <sidebar-link to="/upload-single" name="UploadSingle" icon="ti-folder"/>
+        <sidebar-link to="/upload-departament" name="UploadDepartament" icon="ti-archive"/>
+
       </template>
+      <!-- DESDE ACA HACIA ABAJO Menu Movil TELEFONOS -->
       <mobile-menu>
         <li class="nav-item">
           <a class="nav-link">

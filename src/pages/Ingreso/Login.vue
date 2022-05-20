@@ -28,7 +28,6 @@
 
 <script>
 
-import NotificationTemplate from '../Notifications/NotificationTemplate';
 import axios from "axios";
 
 	export default {
@@ -43,7 +42,6 @@ import axios from "axios";
         loader:null,
         loader2:true,
         baseURL: "http://127.0.0.1:8000/api",
-        type: ["", "info", "success", "warning", "danger"],
 			}
 		},
 		// created() {
@@ -53,7 +51,7 @@ import axios from "axios";
 			async submit() {
         this.loader = true
         this.loader2 = false
-          await axios.post('http://127.0.0.1:8000/api/usuarios/login', this.login)
+          await axios.post(`${this.baseURL}/usuarios/login`, this.login)
           .then(response => {
             sessionStorage.setItem('token', response.data.token);
             sessionStorage.setItem('ui', response.data.usuario.id);
@@ -61,17 +59,43 @@ import axios from "axios";
             if (response.data.usuario.rol_id == 1) {
               if (response.data.usuario.state == 1) {
               this.$router.push('/dashboard');
-              <div class="alert alert-success">
-                    <button type="button" aria-hidden="true" class="close">×</button>
-                    <span>
-                      <b>Correcto!</b> Bienvenido al Sistema!</span>
-                  </div>
+
+              const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer)
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+              }
+            })
+
+            Toast.fire({
+              icon: 'success',
+              title: '¡Bienvenid@ '+response.data.usuario.name+'!'
+            })
+
               } else {
-                 <div class="alert alert-warning">
-                    <button type="button" aria-hidden="true" class="close">×</button>
-                    <span>
-                      <b>Estado Inactivo!</b> Estimado usuario, posee un estado Inactivo. Para modificar el mismo debe comunicarse con un agente del Area de Tecnologia y Sistemas</span>
-                  </div>
+
+              const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 8000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer)
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+              }
+            })
+
+            Toast.fire({
+              icon: 'warning',
+              title: '¡Usuario Inactivo!',
+              text: 'Estimado usuario, se le recomienda comunciarse con algun administrador para ejecutar la activacion de su cuenta'
+            })
                 //  this.$swal({
                 // icon: 'info',
                 // title: 'Oops...',
@@ -84,12 +108,42 @@ import axios from "axios";
               if (response.data.usuario.rol_id == 2) {
                 if (response.data.usuario.state == 1) {
               this.$router.push('/stats')
+
+              const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer)
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+              }
+            })
+
+            Toast.fire({
+              icon: 'success',
+              title: '¡Que bien tenerte de vuelta'+response.data.usuario.name+'!'
+            })
+
                 } else {
-                  <div class="alert alert-warning">
-                    <button type="button" aria-hidden="true" class="close">×</button>
-                    <span>
-                      <b>Estado Inactivo!</b> Estimado usuario, posee un estado Inactivo. Para modificar el mismo debe comunicarse con un agente del Area de Tecnologia y Sistemas</span>
-                  </div>
+                  const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 8000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer)
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+              }
+            })
+
+            Toast.fire({
+              icon: 'warning',
+              title: '¡Usuario Inactivo!',
+              text: 'Estimado usuario, se le recomienda comunciarse con algun administrador para ejecutar la activacion de su cuenta'
+            })
                 //   this.$swal({
                 // icon: 'info',
                 // title: 'Oops...',
@@ -100,11 +154,23 @@ import axios from "axios";
                 }
               } else {
                 if (response.data.usuario.rol_id !== 1 && response.data.usuario.rol_id !== 2) {
-                <div class="alert alert-danger">
-                    <button type="button" aria-hidden="true" class="close">×</button>
-                    <span>
-                      <b>Intruso!</b> Su usuario no posee un rol permitido por el sistema!</span>
-                  </div>
+                  const Toast = this.$swal.mixin({
+                  toast: true,
+                  position: 'top-end',
+                  showConfirmButton: false,
+                  timer: 8000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', this.$swal.stopTimer)
+                    toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+                  }
+                })
+
+                Toast.fire({
+                  icon: 'error',
+                  title: '¡Intruso!',
+                  text: 'No podemos identificar su rol en nuestra base de datos'
+                })
                 //   this.$swal({
                 // icon: 'error',
                 // title: 'Oops...',
@@ -121,6 +187,23 @@ import axios from "axios";
             this.loader = false
             this.loader2 = true
             this.error = true;
+            const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 8000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer)
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+              }
+            })
+
+            Toast.fire({
+              icon: 'error',
+              title: '¡Datos incorrectos!',
+              text: 'Estimado usuario, algun dato ingresado es erroneo, intentelo nuevamente. En caso de olvidar su password dirijase a "olvido de password"'
+            })
           })
           // this.register.password = ''
           // this.loader = false
@@ -132,16 +215,6 @@ import axios from "axios";
           // })
 			},
 
-      notifyVue() {
-      const color = Math.floor(Math.random() * 4 + 1);
-      this.$notify({
-        component: NotificationTemplate,
-        icon: "ti-gift",
-        horizontalAlign: "right",
-        verticalAlign: "top",
-        type: this.type[color]
-      });
-    }
 		},
 	};
 </script>
