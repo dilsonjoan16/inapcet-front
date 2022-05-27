@@ -11,30 +11,40 @@
             </span>
           </div>
         </div>
+        <!-- <div class="col-8"></div> -->
+        <!-- <div class="menu2 my-2" style="cursor:pointer" @click.stop="mostrar = !mostrar">
+          <div class="subir2">
+            <span>
+              <i class="ti-ruler-pencil p-1" aria-hidden="true"></i>
+              <i class="ti-clipboard p-1" aria-hidden="true"></i>
+            </span>
+            <span>
+              Anexar a Proyecto
+            </span>
+          </div>
+        </div> -->
   <!--  -->
-<card class="card col-12" title="Eliminar Documento">
+<card class="card col-12" title="Modificacion del Departamento">
     <div>
       <form @submit.prevent>
         <div class="row">
-          <div class="col-md-10">
+          <div class="col-md-8">
 
-            <fg-input type="password"
-                      label="Codigo Secreto"
-                      placeholder="Ingrese el codigo"
-                      v-model="code"
-                      >
-            </fg-input>
+            <label for="name">Nombre del departamento actual</label>
+            <i class="ti-tag p-1" aria-hidden="true">{{departamentNow.name}}</i>
+            <input class="form-control" type="text" name="name" id="name" placeholder="Nuevo nombre del Departamento" v-model="departament.name">
+            
           </div>
-        </div>
 
-        <div class="text-center">
+        <div class="col-md-4 my-4">
           <p-button type="info"
                     round
-                    @click.native.prevent="deleteDocument">
-            Update Profile
+                    @click.native.prevent="updateDepartament">
+            Modificar Departamento
           </p-button>
         </div>
         <div class="clearfix"></div>
+        </div>
       </form>
     </div>
   </card>
@@ -45,42 +55,58 @@
 import axios from "axios";
 
 export default {
-  name: "UploadTrashedForm",
+  name: "DepartamentEdit",
   data() {
     return {
-      code: null,
+      departament: {
+        name: null,
+        state: 1,
+      },
+      mostrar: false,
       token: sessionStorage.getItem('token'),
-      id: sessionStorage.getItem('doc_del'),
+      departamentNow: null,
+      documento: null,
+      varial: false,
+      rol_id: sessionStorage.getItem('ur'),
       baseURL: "http://127.0.0.1:8000/api",
+      id: sessionStorage.getItem('dep'),
     };
   },
-  created(){},
+  created(){
+    axios.get(`${this.baseURL}/departamentos/ver/${this.id}`, {
+      headers:{
+        'Authorization': `Bearer ${this.token}`,
+      }
+    }).then(response => {
+      this.departamentNow = response.data.departamento
+    })
+  },
   mounted(){},
   methods: {
-    async deleteDocument() {
-      console.log(this.code)
-      let code = {
-        'code':this.code
+    async updateDepartament() {
+      let info = {
+        'name': this.departament.name,
+        'state': this.departament.state,
       }
+      console.log(info)
       try {
-        axios.put(`${this.baseURL}/documentos/eliminado/permanente/${this.id}`, code, {
+        let response = await axios.post(`${this.baseURL}/departamentos/modificar/${this.id}`, info, {
           headers:{
               'Authorization': `Bearer ${this.token}`,
             }
-        }).then(response => {
-          console.log(response.data)
-          console.log(response.status)
-          if (response.status == 201) {
-            this.$swal({
+        })
+        console.log(response.data)
+        console.log(response.status)
+        if (response.status == 200) {
+          this.$swal({
                   position: 'top-end',
                   icon: 'success',
-                  title: '¡Archivo eliminado del sistema con exito!',
+                  title: 'Departamento creado con exito!',
                   showConfirmButton: false,
                   timer: 2500
                 })
             this.$router.back();
-          }
-        })
+        }
       } catch (error) {
         console.log(error)
         alert('error')

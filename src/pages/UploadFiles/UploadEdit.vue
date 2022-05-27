@@ -51,7 +51,7 @@
               <option :value="archivo.state == 1 ? 0 : 1">{{archivo.state == 1 ? "Inactivo" : "Activo"}}</option>
             </select>
           </div>
-          <div class="col-md-6">
+          <div v-if="rol_id == 1" class="col-md-6">
             <div class="form-group">
               <label for="exampleFormControlSelect1">Departamento actual</label>
               <i class="ti-tag p-1" aria-hidden="true">{{archivo.pertenece_departamento.name}}</i>
@@ -110,12 +110,14 @@ export default {
       documento: null,
       varial: false,
       id: sessionStorage.getItem('doc'),
+      rol_id: sessionStorage.getItem('ur'),
+      baseURL: "http://127.0.0.1:8000/api"
     };
   },
   created(){
     // async departamentos() {
       try {
-        axios.get("http://127.0.0.1:8000/api/departamentos/activos", {
+        axios.get(`${this.baseURL}/departamentos/activos`, {
           headers:{
             "Authorization": `Bearer ${this.token}`
           }
@@ -133,7 +135,7 @@ export default {
     // },
     // async proyectos() {
       try {
-        axios.get("http://127.0.0.1:8000/api/proyectos/activos", {
+        axios.get(`${this.baseURL}/proyectos/activos`, {
           headers:{
             "Authorization": `Bearer ${this.token}`
           }
@@ -150,7 +152,7 @@ export default {
       }
     // }
     try {
-        axios.get(`http://127.0.0.1:8000/api/documentos/ver/${this.id}`, {
+        axios.get(`${this.baseURL}/documentos/ver/${this.id}`, {
           headers:{
             "Authorization": `Bearer ${this.token}`
           }
@@ -182,7 +184,7 @@ export default {
       }
       console.log(info)
       try {
-        let response = await axios.post(`http://127.0.0.1:8000/api/documentos/modificar/${this.id}`, info, {
+        let response = await axios.post(`${this.baseURL}/documentos/modificar/${this.id}`, info, {
           headers:{
               'Authorization': `Bearer ${this.token}`,
               'Content-Type': 'multipart/form-data'
@@ -191,6 +193,13 @@ export default {
         console.log(response.data)
         console.log(response.status)
         if (response.status == 201) {
+          this.$swal({
+                  position: 'top-end',
+                  icon: 'success',
+                  title: '¡Archivo modificado con exito!',
+                  showConfirmButton: false,
+                  timer: 2500
+                })
           this.$router.back();
         }
       } catch (error) {

@@ -4,7 +4,6 @@ import NotFound from "@/pages/NotFoundPage.vue";
 
 // Admin pages
 import Dashboard from "@/pages/Dashboard.vue";
-import UserProfile from "@/pages/UserProfile.vue";
 import Notifications from "@/pages/Notifications.vue";
 import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
@@ -18,6 +17,25 @@ import UploadTrashed from "@/pages/UploadFiles/UploadTrashed.vue";
 import UploadSingle from "@/pages/UploadFiles/UploadSingle.vue";
 import UploadDepartament from "@/pages/UploadFiles/UploadDepartament.vue";
 import UploadTrashedForm from "@/pages/UploadFiles/UploadTrashedForm.vue";
+
+import DepartamentMenu from "@/pages/Departaments/DepartamentMenu.vue";
+import DepartamentForm from "@/pages/Departaments/DepartamentForm.vue";
+import DepartamentEdit from "@/pages/Departaments/DepartamentEdit.vue";
+import DepartamentTrashed from "@/pages/Departaments/DepartamentTrashed.vue";
+import DepartamentTrashedForm from "@/pages/Departaments/DepartamentTrashedForm.vue";
+
+import ProyectMenu from "@/pages/Proyects/ProyectMenu.vue";
+import ProyectForm from "@/pages/Proyects/ProyectForm.vue";
+import ProyectEdit from "@/pages/Proyects/ProyectEdit.vue";
+import ProyectTrashed from "@/pages/Proyects/ProyectTrashed.vue";
+
+import UserMenu from "@/pages/UserProfile/UserMenu.vue";
+import UserForm from "@/pages/UserProfile/UserForm.vue";
+import UserProfile from "@/pages/UserProfile.vue";
+import UserTrashed from "@/pages/UserProfile/UserTrashed.vue";
+import UserTrashedForm from "@/pages/UserProfile/UserTrashedForm.vue";
+
+import AuditoriaMenu from "@/pages/Auditoria/AuditoriaMenu.vue";
 
 // Paginas de Ingreso, Registro y Recuperacion de Clave o Codigo
 import Login from "@/pages/Ingreso/Login.vue";
@@ -102,7 +120,78 @@ const routes = [
         path: "upload-trashed-form",
         name: "upload-trashed-form",
         component: UploadTrashedForm
-      }
+      },
+      {
+        path: "departament-menu",
+        name: "departament-menu",
+        component: DepartamentMenu
+      },
+      {
+        path: "departament-form",
+        name: "departament-form",
+        component: DepartamentForm
+      },
+      {
+        path: "departament-edit",
+        name: "departament-edit",
+        component: DepartamentEdit
+      },
+      {
+        path: "departament-trashed",
+        name: "departament-trashed",
+        component: DepartamentTrashed
+      },
+      {
+        path: "departament-trashed-form",
+        name: "departament-trashed-form",
+        component: DepartamentTrashedForm
+      },
+      {
+        path: "proyect-menu",
+        name: "proyect-menu",
+        component: ProyectMenu
+      },
+      {
+        path: "proycet-form",
+        name: "proyect-form",
+        component: ProyectForm
+      },
+      {
+        path: "proyect-edit",
+        name: "proyect-edit",
+        component: ProyectEdit
+      },
+      {
+        path: "proyect-trashed",
+        name: "proyect-trashed",
+        component: ProyectTrashed
+      },
+      {
+        path: "user-menu",
+        name: "user-menu",
+        component: UserMenu
+      },
+      {
+        path: "user-form",
+        name: "user-form",
+        component: UserForm
+      },
+      {
+        path: "user-trashed",
+        name: "user-trashed",
+        component: UserTrashed
+      },
+      {
+        path: "user-trashed-form",
+        name: "user-trashed-form",
+        component: UserTrashedForm
+      },
+      {
+        path: "auditoria-menu",
+        name: "auditoria-menu",
+        component: AuditoriaMenu
+      },
+
     ],
     beforeEnter: Guard.auth
   },

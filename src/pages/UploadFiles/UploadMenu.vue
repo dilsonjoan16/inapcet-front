@@ -23,12 +23,14 @@
               </slot>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in data" :key="index">
+              <tr v-show="datafull == true" v-for="(item, index) in data" :key="index">
                 <slot :row="item">
                   <td>{{item.id}}</td>
                   <td>{{item.name.split('-')[1]}}</td>
                   <td>{{item.state == 1 ? "Activo" : "Inactivo"}}</td>
                   <td>{{item.pertenece_departamento.name}}</td>
+                  <td>{{item.pertenece_proyectos == null ? "Sin Asignar" : item.pertenece_proyectos.name}}</td>
+                  <td>{{item.created_at.split('T')[0]}}</td>
                   <td>
                     <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i>
                     <i class="ti-pencil-alt mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="update(item.id)"></i>
@@ -38,6 +40,10 @@
               </tr>
             </tbody>
           </table>
+          <div v-show="datanull == true" class="typo-line my-4 mx-4">
+                  <h1>
+                    <p class="category"></p>Sin datos que mostrar por el momento </h1>
+                </div>
           </div>
         </card>
       </div>
@@ -55,10 +61,12 @@ export default {
   },
   data() {
     return {
-      columns: ["Id", "Nombre", "Estado", "Departamento", "Acciones"],
+      columns: ["Id", "Nombre", "Estado", "Departamento", "Proyecto", "Fecha de Creacion", "Acciones"],
       data: [],
       token: sessionStorage.getItem('token'),
-      baseURL: "http://127.0.0.1:8000/api"
+      baseURL: "http://127.0.0.1:8000/api",
+      datanull: false,
+      datafull: true,
     };
   },
   mounted(){
@@ -75,6 +83,11 @@ export default {
       console.log(response.data)
       if (response.status == 200) {
         this.data = response.data.documento
+      }
+
+      if (this.data.length == 0) {
+        this.datanull = true;
+        this.datafull = false;
       }
     },
     async download(name) {
@@ -161,7 +174,7 @@ export default {
           'El archivo fue eliminado con exito',
           'success'
       )
-        this.$router.reload();
+        window.location.reload();
         }
       })
     } catch (error) {

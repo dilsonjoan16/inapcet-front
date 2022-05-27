@@ -50,7 +50,7 @@
                       >
             </fg-input>
           </div>
-          <div class="col-md-4">
+          <div v-if="rol_id == 1" class="col-md-4">
             <div class="form-group">
               <label for="exampleFormControlSelect1">Departamentos</label>
               <select class="form-control" id="exampleFormControlSelect1" v-model="archivo.departament_id">
@@ -109,12 +109,14 @@ export default {
       proyectos: [],
       documento: null,
       varial: false,
+      rol_id: sessionStorage.getItem('ur'),
+      baseURL: "http://127.0.0.1:8000/api",
     };
   },
   created(){
     // async departamentos() {
       try {
-        axios.get("http://127.0.0.1:8000/api/departamentos/activos", {
+        axios.get(`${this.baseURL}/departamentos/activos`, {
           headers:{
             "Authorization": `Bearer ${this.token}`
           }
@@ -132,7 +134,7 @@ export default {
     // },
     // async proyectos() {
       try {
-        axios.get("http://127.0.0.1:8000/api/proyectos/activos", {
+        axios.get(`${this.baseURL}/proyectos/activos`, {
           headers:{
             "Authorization": `Bearer ${this.token}`
           }
@@ -165,7 +167,7 @@ export default {
       }
       console.log(info)
       try {
-        let response = await axios.post("http://127.0.0.1:8000/api/documentos/crear", info, {
+        let response = await axios.post(`${this.baseURL}/documentos/crear`, info, {
           headers:{
               'Authorization': `Bearer ${this.token}`,
               'Content-Type': 'multipart/form-data'
@@ -174,6 +176,13 @@ export default {
         console.log(response.data)
         console.log(response.status)
         if (response.status == 201) {
+          this.$swal({
+                  position: 'top-end',
+                  icon: 'success',
+                  title: '¡Archivo creado con exito!',
+                  showConfirmButton: false,
+                  timer: 2500
+                })
           this.$router.back();
         }
       } catch (error) {

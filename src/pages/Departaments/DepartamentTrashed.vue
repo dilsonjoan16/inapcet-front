@@ -38,9 +38,9 @@
               <tr v-show="datafull == true" v-for="(item, index) in data" :key="index">
                 <slot :row="item">
                   <td>{{item.id}}</td>
-                  <td>{{item.name.split('-')[1]}}</td>
+                  <td>{{item.name}}</td>
                   <td>{{item.state == 1 ? "Activo" : "Inactivo"}}</td>
-                  <td>{{item.pertenece_departamento.name}}</td>
+                  <td>{{item.deleted_at.split(' ')[0]}}</td>
                   <td>
                     <!-- <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i> -->
                     <i class="ti-close mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="deleted(item.id)"></i>
@@ -50,7 +50,7 @@
               </tr>
             </tbody>
           </table>
-          <div v-show="datanull == true" class="typo-line my-4 mx-4">
+                <div v-show="datanull == true" class="typo-line my-4 mx-4">
                   <h1>
                     <p class="category"></p>Sin datos que mostrar por el momento </h1>
                 </div>
@@ -65,13 +65,13 @@ import { PaperTable } from "@/components";
 import axios from "axios"
 
 export default {
-  name: "UploadMenu",
+  name: "DepartamentTrashed",
   components: {
     PaperTable
   },
   data() {
     return {
-      columns: ["Id", "Nombre", "Estado", "Departamento", "Acciones"],
+      columns: ["Id", "Nombre", "Estado", "Fecha de Eliminacion", "Acciones"],
       data: [],
       token: sessionStorage.getItem('token'),
       baseURL: "http://127.0.0.1:8000/api",
@@ -81,19 +81,19 @@ export default {
     };
   },
   mounted(){
-    this.documentos();
+    this.departamentos();
   },
   methods:{
-    async documentos()
+    async departamentos()
     {
-      let response = await axios.get(`${this.baseURL}/documentos/inactivos`, {
+      let response = await axios.get(`${this.baseURL}/departamentos/inactivos`, {
         headers:{
           "Authorization": `Bearer ${this.token}`
         }
       })
       console.log(response.data)
       if (response.status == 200) {
-        this.data = response.data.documento
+        this.data = response.data.departamento
       }
 
       if (this.data.length == 0) {
@@ -131,7 +131,7 @@ export default {
     // },
     async deleted(id) {
       this.$swal({
-          title: '¿Desea eliminar el archivo?',
+          title: '¿Desea eliminar el departamento?',
   text: "Recuerde que esta opcion elimina por completo el registro de su sistema y no hay forma de recuperarlo una vez sea eliminado ¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
@@ -142,13 +142,13 @@ export default {
 }).then((result) => {
   if (result.isConfirmed) {
     sessionStorage.setItem('doc_del',id)
-      this.$router.push('/upload-trashed-form');
+      this.$router.push('/departament-trashed-form');
   }
       })
     },
     async restore(id) {
       this.$swal({
-          title: '¿Desea restaurar el archivo?',
+          title: '¿Desea restaurar el departamento?',
   text: "¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
@@ -159,7 +159,7 @@ export default {
 }).then((result) => {
   if (result.isConfirmed) {
     try {
-      axios.get(`${this.baseURL}/documentos/activar/${id}`,{
+      axios.get(`${this.baseURL}/departamentos/activar/${id}`,{
         headers:{
           "authorization": `Bearer ${this.token}`
         }
@@ -168,7 +168,7 @@ export default {
         if (response.status == 200) {
           this.$swal(
           '¡Restaurado!',
-          'El archivo fue restaurado con exito',
+          'El departamento fue restaurado con exito',
           'success'
       )
       window.location.reload();

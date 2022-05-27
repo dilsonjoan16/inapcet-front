@@ -9,10 +9,24 @@
         <sidebar-link to="/icons" name="Icons" icon="ti-pencil-alt2"/>
         <sidebar-link to="/maps" name="Map" icon="ti-map"/>
         <sidebar-link to="/notifications" name="Notifications" icon="ti-bell"/>
-        <sidebar-link to="/upload-menu" name="UploadMenu" icon="ti-archive"/>
-        <sidebar-link to="/upload-trashed" name="UploadTrashed" icon="ti-package"/>
+
+        <sidebar-link to="/upload-menu" name="UploadMenu" icon="ti-package"/>
         <sidebar-link to="/upload-single" name="UploadSingle" icon="ti-folder"/>
         <sidebar-link to="/upload-departament" name="UploadDepartament" icon="ti-archive"/>
+        <sidebar-link to="/upload-trashed" name="UploadTrashed" icon="ti-trash"/>
+
+        <sidebar-link to="/departament-menu" name="DepartamentMenu" icon="ti-home"/>
+        <sidebar-link to="/departament-trashed" name="DepartamentTrashed" icon="ti-trash"/>
+
+        <sidebar-link to="/proyect-menu" name="ProyectMenu" icon="ti-hummer"/>
+        <sidebar-link to="/proyect-trashed" name="ProyectTrashed" icon="ti-trash"/>
+
+        <sidebar-link to="/user-menu" name="UserMenu" icon="ti-user"/>
+        <sidebar-link to="/user-trashed" name="UserTrashed" icon="ti-trash"/>
+
+        <sidebar-link to="/auditoria-menu" name="AuditoriaMenu" icon="ti-bar-chart-alt"/>
+
+
 
       </template>
       <!-- DESDE ACA HACIA ABAJO Menu Movil TELEFONOS -->

@@ -30,7 +30,7 @@
         <div class="text-center">
           <p-button type="info"
                     round
-                    @click.native.prevent="deleteDocument">
+                    @click.native.prevent="deleteDepartament">
             Update Profile
           </p-button>
         </div>
@@ -45,7 +45,7 @@
 import axios from "axios";
 
 export default {
-  name: "UploadTrashedForm",
+  name: "DepartamentTrashedForm",
   data() {
     return {
       code: null,
@@ -57,13 +57,13 @@ export default {
   created(){},
   mounted(){},
   methods: {
-    async deleteDocument() {
+    async deleteDepartament() {
       console.log(this.code)
       let code = {
         'code':this.code
       }
       try {
-        axios.put(`${this.baseURL}/documentos/eliminado/permanente/${this.id}`, code, {
+        axios.post(`${this.baseURL}/departamentos/eliminado/forzado/${this.id}`, code, {
           headers:{
               'Authorization': `Bearer ${this.token}`,
             }

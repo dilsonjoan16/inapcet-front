@@ -52,7 +52,8 @@ export default {
   },
   data() {
     return {
-      activeNotifications: false
+      activeNotifications: false,
+      baseURL: "http://127.0.0.1:8000/api",
     };
   },
   methods: {
@@ -72,14 +73,47 @@ export default {
       this.$sidebar.displaySidebar(false);
     },
     async logout() {
-      await axios.get('http://127.0.0.1:8000/api/usuarios/logout',{
-        headers:{
-          "Authorization": "Bearer "+sessionStorage.getItem('token')
-        }
-      }).then(response => {
-        this.$router.push("/login")
-      })
-    }
+      this.$swal({
+      title: '¿Desea cerrar su sesion?',
+      text: "¡Asegurate de que sea la decision correcta!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '¡Si, cerrarla!',
+      cancelButtonText: 'Volver'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.get(`${this.baseURL}/usuarios/logout`,{
+          headers:{
+            "Authorization": "Bearer "+sessionStorage.getItem('token')
+          }
+        }).then(response => {
+          if (response.status == 200) {
+            sessionStorage.clear()
+            this.$router.push("/login")
+            const Toast = this.$swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', this.$swal.stopTimer)
+                  toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'success',
+                title: '¡Sesion finalizada!',
+                text: 'Salio del sistema con exito. Hasta pronto'
+              })
+          }
+          })
+}
+  })
+    },
   }
 };
 </script>
