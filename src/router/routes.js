@@ -31,11 +31,20 @@ import ProyectTrashed from "@/pages/Proyects/ProyectTrashed.vue";
 
 import UserMenu from "@/pages/UserProfile/UserMenu.vue";
 import UserForm from "@/pages/UserProfile/UserForm.vue";
+import UserEdit from "@/pages/UserProfile/EditProfileForm.vue";
 import UserProfile from "@/pages/UserProfile.vue";
 import UserTrashed from "@/pages/UserProfile/UserTrashed.vue";
 import UserTrashedForm from "@/pages/UserProfile/UserTrashedForm.vue";
 
-import AuditoriaMenu from "@/pages/Auditoria/AuditoriaMenu.vue";
+import AuditoriaDocuments from "@/pages/Auditoria/AuditoriaDocuments.vue";
+import AuditoriaUsers from "@/pages/Auditoria/AuditoriaUsers.vue";
+import AuditoriaDepartaments from "@/pages/Auditoria/AuditoriaDepartaments.vue";
+import AuditoriaProyects from "@/pages/Auditoria/AuditoriaProyects.vue";
+
+import ShowDocuments from "@/pages/Auditoria/Show/ShowDocuments.vue";
+import ShowDepartaments from "@/pages/Auditoria/Show/ShowDepartaments.vue";
+import ShowProyects from "@/pages/Auditoria/Show/ShowProyects.vue";
+import ShowUsers from "@/pages/Auditoria/Show/ShowUsers.vue";
 
 // Paginas de Ingreso, Registro y Recuperacion de Clave o Codigo
 import Login from "@/pages/Ingreso/Login.vue";
@@ -152,7 +161,7 @@ const routes = [
         component: ProyectMenu
       },
       {
-        path: "proycet-form",
+        path: "proyect-form",
         name: "proyect-form",
         component: ProyectForm
       },
@@ -177,6 +186,11 @@ const routes = [
         component: UserForm
       },
       {
+        path: "user-edit",
+        name: "user-edit",
+        component: UserEdit
+      },
+      {
         path: "user-trashed",
         name: "user-trashed",
         component: UserTrashed
@@ -187,9 +201,44 @@ const routes = [
         component: UserTrashedForm
       },
       {
-        path: "auditoria-menu",
-        name: "auditoria-menu",
-        component: AuditoriaMenu
+        path: "auditoria-documents",
+        name: "auditoria-documents",
+        component: AuditoriaDocuments
+      },
+      {
+        path: "auditoria-departaments",
+        name: "auditoria-departaments",
+        component: AuditoriaDepartaments
+      },
+      {
+        path: "auditoria-proyects",
+        name: "auditoria-proyects",
+        component: AuditoriaProyects
+      },
+      {
+        path: "auditoria-users",
+        name: "auditoria-users",
+        component: AuditoriaUsers
+      },
+      {
+        path: "show-documents",
+        name: "show-documents",
+        component: ShowDocuments
+      },
+      {
+        path: "show-departaments",
+        name: "show-departaments",
+        component: ShowDepartaments
+      },
+      {
+        path: "show-proyects",
+        name: "show-proyects",
+        component: ShowProyects
+      },
+      {
+        path: "show-users",
+        name: "show-users",
+        component: ShowUsers
       },
 
     ],

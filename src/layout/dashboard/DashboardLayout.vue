@@ -24,7 +24,11 @@
         <sidebar-link to="/user-menu" name="UserMenu" icon="ti-user"/>
         <sidebar-link to="/user-trashed" name="UserTrashed" icon="ti-trash"/>
 
-        <sidebar-link to="/auditoria-menu" name="AuditoriaMenu" icon="ti-bar-chart-alt"/>
+        <sidebar-link to="/auditoria-documents" name="AuditoriaDocuments" icon="ti-bar-chart-alt"/>
+        <sidebar-link to="/auditoria-users" name="AuditoriaUsers" icon="ti-support"/>
+        <sidebar-link to="/auditoria-departaments" name="AuditoriaDepartaments" icon="ti-bar-chart"/>
+        <sidebar-link to="/auditoria-proyects" name="AuditoriaProyects" icon="ti-stats-up"/>
+
 
 
 

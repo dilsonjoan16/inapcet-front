@@ -1,7 +1,7 @@
 <template>
   <div class="row">
 
-        <div class="menu my-2 mx-2" style="cursor:pointer">
+        <!-- <div class="menu my-2 mx-2" style="cursor:pointer">
           <router-link to="departament-form" class="subir">
             <span>
               <i class="ti-plus mx-2" aria-hidden="true"></i>
@@ -11,7 +11,7 @@
               Crear Departamento
             </span>
           </router-link>
-        </div>
+        </div> -->
 
 
       <div class="col-12">
@@ -23,44 +23,31 @@
                 <th v-for="column in columns" :key="column">{{column}}</th>
               </slot>
             </thead>
-            <tbody v-show="datafull == true">
-              <tr v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index" v-for="(item, index) in data" :key="index">
+            <tbody>
+              <tr v-show="datafull == true" v-for="(item, index) in data" :key="index">
                 <slot :row="item">
                   <td>{{item.id}}</td>
                   <td>{{item.name}}</td>
                   <td>{{item.state == 1 ? "Activo" : "Inactivo"}}</td>
                   <td>{{item.created_at.split('T')[0]}}</td>
-                  <td>
+                  <td>{{item.updated_at == null ? "Sin modificar aun" : item.updated_at.split('T')[0]}}</td>
+                  <td>{{item.deleted_at == null ? "Sin eliminar aun" : item.deleted_at.split(' ')[0]}}</td>
+                  <td>{{item.restored_at == null ? "Sin restaurar aun" : item.restored_at.split(' ')[0]}}</td>
+                  <td style="cursor:pointer" v-on:click.prevent="show(item.id)">
                     <!-- <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i> -->
-                    <i class="ti-pencil-alt mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="update(item.id)"></i>
-                    <i class="ti-trash mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="trashed(item.id)"></i>
+                    <i class="ti-eye" id="ver_" aria-hidden="true"></i>
+                    <i class="ti-key" aria-hidden="true"></i>
                   </td>
                 </slot>
               </tr>
             </tbody>
           </table>
-          <div v-show="datafull == false" class="typo-line my-4 mx-4">
+          <div v-show="datanull == true" class="typo-line my-4 mx-4">
                   <h1>
                     <p class="category"></p>Sin datos que mostrar por el momento </h1>
                 </div>
           </div>
         </card>
-        <!-- Controles -->
-        <div class="row">
-          <div class="col-5"></div>
-          <div class="menu">
-          <div style="cursor:pointer" class="subir2" v-show="pag != 1" @click.prevent="pag -= 1">
-            <span aria-hidden="true" class="ti-arrow-left"></span>
-            <span>Anterior</span>
-          </div>
-          <div style="cursor:pointer" class="subir3" v-show="pag * NUM_RESULTS / data.length < 1" @click.prevent="pag += 1">
-            <span aria-hidden="true" class="ti-arrow-right mx-2"></span>
-            <span>Siguiente</span>
-          </div>
-        </div>
-          <div class="col-4"></div>
-        </div>
-        <!-- Fin de Controles -->
       </div>
   </div>
 </template>
@@ -76,15 +63,13 @@ export default {
   },
   data() {
     return {
-      columns: ["Id", "Nombre", "Estado", "Fecha de Creacion", "Acciones"],
+      columns: ["Id", "Nombre", "Estado", "Fecha de Creacion", "Fecha de Modificacion", "Fecha de Eliminacion", "Fecha de Restauracion", "Acciones"],
       data: [],
       token: sessionStorage.getItem('token'),
       baseURL: "http://127.0.0.1:8000/api",
       rol_id: sessionStorage.getItem('ur'),
-      // datanull: false,
+      datanull: false,
       datafull: true,
-      NUM_RESULTS: 10, // Numero de resultados por página
-      pag: 1, // Página inicial
     };
   },
   mounted(){
@@ -93,22 +78,20 @@ export default {
   methods:{
     async departamentos()
     {
-      let response = await axios.get(`${this.baseURL}/departamentos/activos`, {
+      let response = await axios.get(`${this.baseURL}/proyectos/auditoria`, {
         headers:{
           "Authorization": `Bearer ${this.token}`
         }
       })
       console.log(response.data)
       if (response.status == 200) {
-        this.data = response.data.departamento
+        this.data = response.data.proyecto
       }
 
-      this.data.length == 0 ? this.datafull = false : this.datafull = true;
-
-      // if (this.data.length == 0) {
-      //   this.datanull = true;
-      //   this.datafull = false;
-      // }
+      if (this.data.length == 0) {
+        this.datanull = true;
+        this.datafull = false;
+      }
     },
     // async download(name) {
     //   // try {
@@ -152,57 +135,10 @@ export default {
     //   //   console.log(error);
     //   // }
     // },
-    async update(id) {
-      this.$swal({
-          title: '¿Desea modificar el departamento actual?',
-  text: "¡Asegurate de que sea la decision correcta!",
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
-  confirmButtonText: '¡Si, modificarlo!',
-  cancelButtonText: 'Volver'
-}).then((result) => {
-  if (result.isConfirmed) {
-    sessionStorage.setItem('dep',id)
-      this.$router.push('/departament-edit');
-  }
-      })
+    async show(id) {
+      sessionStorage.setItem('proyaud',id)
+      this.$router.push('/show-proyects');
     },
-    async trashed(id) {
-      this.$swal({
-          title: '¿Desea eliminar el departamento?',
-  text: "¡Asegurate de que sea la decision correcta!",
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
-  confirmButtonText: '¡Si, eliminarlo!',
-  cancelButtonText: 'Volver'
-}).then((result) => {
-  if (result.isConfirmed) {
-    try {
-      axios.get(`${this.baseURL}/departamentos/desactivar/${id}`,{
-        headers:{
-          "Authorization": `Bearer ${this.token}`
-        }
-      }).then(response => {
-        console.log(response)
-        if (response.status == 200) {
-          this.$swal(
-          '¡Eliminado!',
-          'El departamento fue eliminado con exito',
-          'success'
-      )
-        window.location.reload();
-        }
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-      })
-    }
   }
 }
 
@@ -252,71 +188,7 @@ export default {
 #tabla{
   margin-left: 10px;
 }
-.subir2 span:first-child{
-  display: inline-block;
-  padding: 10px;
-  margin-left: 40%;
-}
-.subir2{
-   display: block;
-    position: relative;
-    overflow: hidden;
-    padding: 0px 10px;
-    color: white;
-    width: 180px;
-}
-.subir2 span:last-child{
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: translateY(-100%);
-}
-.subir2 span{
-  transition: transform 0.2s ease-out;
-}
-.subir2:hover span:first-child{
-  transform: translateY(100%);
-}
-.subir2:hover span:last-child{
-  transform: translateY(2%);
-}
-/* Separacion */
-.subir3 span:first-child{
-  display: inline-block;
-  padding: 10px;
-  padding-left: 40%;
-}
-.subir3{
-   display: block;
-    position: relative;
-    overflow: hidden;
-    padding: 0px 10px;
-    color: white;
-    width: 180px;
-}
-.subir3 span:last-child{
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: translateY(-100%);
-}
-.subir3 span{
-  transition: transform 0.2s ease-out;
-}
-.subir3:hover span:first-child{
-  transform: translateY(100%);
-}
-.subir3:hover span:last-child{
-  transform: translateY(2%);
+#ver_{
+  margin-left: 20px;
 }
 </style>

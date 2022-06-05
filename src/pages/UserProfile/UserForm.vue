@@ -43,7 +43,7 @@
             <div class="form-group col-md-4">
               <label for="exampleFormControlSelect1">Roles</label>
               <select class="form-control" id="exampleFormControlSelect1" v-model="user.rol_id">
-                <option disabled>Elija el Rol</option>
+                <option disabled selected>Elija el Rol</option>
                 <option v-for="(rol, index) in roles" :key="index" :value="rol.id">
                   {{rol.name}}
                 </option>
@@ -53,7 +53,7 @@
         <div class="form-group col-md-4">
               <label for="exampleFormControlSelect1">Departamentos</label>
               <select class="form-control" id="exampleFormControlSelect1" v-model="user.departament_id">
-                <option disabled>Elija el Departamento</option>
+                <option disabled selected>Elija el Departamento</option>
                 <option v-for="(departamento, index) in departamentos" :key="index" :value="departamento.id">
                   {{departamento.name}}
                 </option>

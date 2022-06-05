@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="col-8"></div>
-        <div class="menu2 my-2" style="cursor:pointer" @click.stop="mostrar = !mostrar">
+        <div class="menu2 my-2" style="cursor:pointer" @click.stop="proyecto()">
           <div class="subir2">
             <span>
               <i class="ti-ruler-pencil p-1" aria-hidden="true"></i>
@@ -24,7 +24,7 @@
           </div>
         </div>
   <!--  -->
-<card class="card col-12" title="Edit Profile">
+<card class="card col-12" title="Cargar de Archivos">
     <div>
       <form @submit.prevent>
         <div class="row">
@@ -41,7 +41,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-3">
+          <!-- <div class="col-md-3">
 
             <fg-input type="text"
                       label="Estado"
@@ -49,26 +49,27 @@
                       placeholder="Activo"
                       >
             </fg-input>
-          </div>
-          <div v-if="rol_id == 1" class="col-md-4">
-            <div class="form-group">
-              <label for="exampleFormControlSelect1">Departamentos</label>
-              <select class="form-control" id="exampleFormControlSelect1" v-model="archivo.departament_id">
-                <option disabled>Elija su Departamento</option>
-                <option v-for="(departamento, index) in departamentos" :key="index" :value="departamento.id">
-                  {{departamento.name}}
-                </option>
-              </select>
+          </div> -->
+
+          <div v-show="mostrar == false" class="col-md-4">
+            <div v-if="rol_id == 1">
+              <div class="form-group">
+                <label for="exampleFormControlSelect1">Departamentos</label>
+                <select class="form-control" id="exampleFormControlSelect1" v-model="archivo.departament_id">
+                  <option disabled selected>Elija su Departamento</option>
+                  <option v-for="(departamento, index) in departamentos" :key="index" :value="departamento.id">
+                    {{departamento.name}}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="row" v-show="mostrar == true">
-          <div class="col-md-6">
+          <div v-show="mostrar == true" class="col-md-4">
             <div class="form-group">
               <label for="exampleFormControlSelect1">Proyectos</label>
               <select class="form-control" id="exampleFormControlSelect1" v-model="archivo.proyect_id">
-                <option disabled>Elija su Proyecto</option>
+                <option disabled selected>Elija su Proyecto</option>
                 <option v-for="(proyecto, index) in proyectos" :key="index" :value="proyecto.id">
                   {{proyecto.name}}
                 </option>
@@ -157,6 +158,12 @@ export default {
       const file = event.target.files[0];
       this.documento = file;
       this.varial = true;
+    },
+    async proyecto() {
+      this.mostrar =! this.mostrar;
+      if (this.mostrar == true) {
+         this.archivo.departament_id = 2
+      }
     },
     async createDocument() {
       let info = {

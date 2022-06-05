@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="col-8"></div>
-        <div class="menu2 my-2" style="cursor:pointer" @click.stop="mostrar = !mostrar">
+        <div v-show="archivo.proyect_id == null" class="menu2 my-2" style="cursor:pointer" @click.stop="mostrar = !mostrar">
           <div class="subir2">
             <span>
               <i class="ti-ruler-pencil p-1" aria-hidden="true"></i>
@@ -55,20 +55,23 @@
             <div class="form-group">
               <label for="exampleFormControlSelect1">Departamento actual</label>
               <i class="ti-tag p-1" aria-hidden="true">{{archivo.pertenece_departamento.name}}</i>
-              <select class="form-control" id="exampleFormControlSelect1" v-model="archivo.departament_id">
-                <option disabled>Elija su Departamento</option>
+              <select v-show="archivo.proyect_id == null" class="form-control" id="exampleFormControlSelect1" v-model="archivo.departament_id">
+                <option disabled selected>Elija su Departamento</option>
                 <option v-for="(departamento, index) in departamentos" :key="index" :value="departamento.id">
                   {{departamento.name}}
                 </option>
               </select>
+              <span v-show="archivo.proyect_id !== null" class="form-control">
+                {{archivo.pertenece_departamento.name}}
+              </span>
             </div>
           </div>
-          <div class="col-md-5" v-show="archivo.proyect_id != null || mostrar == true">
+          <div class="col-md-5" v-show="archivo.proyect_id !== null || mostrar == true">
             <div class="form-group">
               <label for="exampleFormControlSelect1">{{archivo.proyect_id == null ? "Proyectos" : "Proyecto actual"}}</label>
               <i v-if="archivo.proyect_id != null" class="ti-tag p-1" aria-hidden="true">{{archivo.pertenece_proyectos.name}}</i>
               <select class="form-control" id="exampleFormControlSelect1" v-model="archivo.proyect_id">
-                <option disabled>Elija su Proyecto</option>
+                <option disabled selected>Elija su Proyecto</option>
                 <option v-for="(proyecto, index) in proyectos" :key="index" :value="proyecto.id">
                   {{proyecto.name}}
                 </option>
@@ -159,7 +162,9 @@ export default {
         }).then(response =>{
           // console.log(response)
           if (response.status == 200) {
-            this.archivo = response.data.documento
+           response.data.documento.map(r => {
+             this.archivo = r
+           })
           }
           console.log(this.archivo)
         })

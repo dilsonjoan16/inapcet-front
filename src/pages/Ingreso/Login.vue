@@ -56,6 +56,7 @@ import axios from "axios";
             sessionStorage.setItem('token', response.data.token);
             sessionStorage.setItem('ui', response.data.usuario.id);
             sessionStorage.setItem('ur', response.data.usuario.rol_id);
+            sessionStorage.setItem('depid', response.data.usuario.departament_id);
             if (response.data.usuario.rol_id == 1) {
               if (response.data.usuario.state == 1) {
               this.$router.push('/dashboard');

@@ -34,8 +34,8 @@
                 <th v-for="column in columns" :key="column">{{column}}</th>
               </slot>
             </thead>
-            <tbody>
-              <tr v-show="datafull == true" v-for="(item, index) in data" :key="index">
+            <tbody v-show="datafull == true">
+              <tr v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index" v-for="(item, index) in data" :key="index">
                 <slot :row="item">
                   <td>{{item.id}}</td>
                   <td>{{item.name.split('-')[1]}}</td>
@@ -50,12 +50,28 @@
               </tr>
             </tbody>
           </table>
-          <div v-show="datanull == true" class="typo-line my-4 mx-4">
+          <div v-show="datafull == false" class="typo-line my-4 mx-4">
                   <h1>
                     <p class="category"></p>Sin datos que mostrar por el momento </h1>
                 </div>
           </div>
         </card>
+        <!-- Controles -->
+        <div class="row">
+          <div class="col-5"></div>
+          <div class="menu">
+          <div style="cursor:pointer" class="subir2" v-show="pag != 1" @click.prevent="pag -= 1">
+            <span aria-hidden="true" class="ti-arrow-left"></span>
+            <span>Anterior</span>
+          </div>
+          <div style="cursor:pointer" class="subir3" v-show="pag * NUM_RESULTS / data.length < 1" @click.prevent="pag += 1">
+            <span aria-hidden="true" class="ti-arrow-right mx-2"></span>
+            <span>Siguiente</span>
+          </div>
+        </div>
+          <div class="col-4"></div>
+        </div>
+        <!-- Fin de Controles -->
       </div>
   </div>
 </template>
@@ -76,8 +92,10 @@ export default {
       token: sessionStorage.getItem('token'),
       baseURL: "http://127.0.0.1:8000/api",
       rol_id: sessionStorage.getItem('ur'),
-      datanull: false,
+      // datanull: false,
       datafull: true,
+      NUM_RESULTS: 10, // Numero de resultados por página
+      pag: 1, // Página inicial
     };
   },
   mounted(){
@@ -96,10 +114,12 @@ export default {
         this.data = response.data.documento
       }
 
-      if (this.data.length == 0) {
-        this.datanull = true;
-        this.datafull = false;
-      }
+      this.data.length == 0 ? this.datafull = false : this.datafull = true;
+
+      // if (this.data.length == 0) {
+      //   this.datanull = true;
+      //   this.datafull = false;
+      // }
     },
     // async download(name) {
     //   // try {
@@ -130,21 +150,9 @@ export default {
     //   // }
     // },
     async deleted(id) {
-      this.$swal({
-          title: '¿Desea eliminar el archivo?',
-  text: "Recuerde que esta opcion elimina por completo el registro de su sistema y no hay forma de recuperarlo una vez sea eliminado ¡Asegurate de que sea la decision correcta!",
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
-  confirmButtonText: '¡Si, eliminarlo!',
-  cancelButtonText: 'Volver'
-}).then((result) => {
-  if (result.isConfirmed) {
-    sessionStorage.setItem('doc_del',id)
+      sessionStorage.setItem('doc_del',id)
       this.$router.push('/upload-trashed-form');
-  }
-      })
+
     },
     async restore(id) {
       this.$swal({
@@ -300,5 +308,72 @@ export default {
 }
 #tabla{
   margin-left: 10px;
+}
+.subir2 span:first-child{
+  display: inline-block;
+  padding: 10px;
+  margin-left: 40%;
+}
+.subir2{
+   display: block;
+    position: relative;
+    overflow: hidden;
+    padding: 0px 10px;
+    color: white;
+    width: 180px;
+}
+.subir2 span:last-child{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-100%);
+}
+.subir2 span{
+  transition: transform 0.2s ease-out;
+}
+.subir2:hover span:first-child{
+  transform: translateY(100%);
+}
+.subir2:hover span:last-child{
+  transform: translateY(2%);
+}
+/* Separacion */
+.subir3 span:first-child{
+  display: inline-block;
+  padding: 10px;
+  padding-left: 40%;
+}
+.subir3{
+   display: block;
+    position: relative;
+    overflow: hidden;
+    padding: 0px 10px;
+    color: white;
+    width: 180px;
+}
+.subir3 span:last-child{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-100%);
+}
+.subir3 span{
+  transition: transform 0.2s ease-out;
+}
+.subir3:hover span:first-child{
+  transform: translateY(100%);
+}
+.subir3:hover span:last-child{
+  transform: translateY(2%);
 }
 </style>
