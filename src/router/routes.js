@@ -28,6 +28,7 @@ import ProyectMenu from "@/pages/Proyects/ProyectMenu.vue";
 import ProyectForm from "@/pages/Proyects/ProyectForm.vue";
 import ProyectEdit from "@/pages/Proyects/ProyectEdit.vue";
 import ProyectTrashed from "@/pages/Proyects/ProyectTrashed.vue";
+import ProyectDocuments from "@/pages/Proyects/ProyectDocuments.vue";
 
 import UserMenu from "@/pages/UserProfile/UserMenu.vue";
 import UserForm from "@/pages/UserProfile/UserForm.vue";
@@ -35,6 +36,7 @@ import UserEdit from "@/pages/UserProfile/EditProfileForm.vue";
 import UserProfile from "@/pages/UserProfile.vue";
 import UserTrashed from "@/pages/UserProfile/UserTrashed.vue";
 import UserTrashedForm from "@/pages/UserProfile/UserTrashedForm.vue";
+import ProfileUser from "@/pages/UserProfile/ProfileUser.vue";
 
 import AuditoriaDocuments from "@/pages/Auditoria/AuditoriaDocuments.vue";
 import AuditoriaUsers from "@/pages/Auditoria/AuditoriaUsers.vue";
@@ -50,6 +52,7 @@ import ShowUsers from "@/pages/Auditoria/Show/ShowUsers.vue";
 import Login from "@/pages/Ingreso/Login.vue";
 import Register from "@/pages/Ingreso/Register.vue";
 import Recovery from "@/pages/Ingreso/Recovery.vue";
+import Code from "@/pages/Ingreso/Code.vue";
 
 // Midleware de seguridad
 import Guard from "@/services/auth.js";
@@ -176,6 +179,11 @@ const routes = [
         component: ProyectTrashed
       },
       {
+        path: "proyect-documents",
+        name: "proyect-documents",
+        component: ProyectDocuments
+      },
+      {
         path: "user-menu",
         name: "user-menu",
         component: UserMenu
@@ -199,6 +207,11 @@ const routes = [
         path: "user-trashed-form",
         name: "user-trashed-form",
         component: UserTrashedForm
+      },
+      {
+        path: "profile-user",
+        name: "profile-user",
+        component: ProfileUser
       },
       {
         path: "auditoria-documents",
@@ -259,6 +272,11 @@ const routes = [
     path: "/recovery",
     name: "recovery",
     component: Recovery
+  },
+  {
+    path: "/code",
+    name: "code",
+    component: Code
   }
 ];
 

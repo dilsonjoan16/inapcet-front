@@ -43,7 +43,7 @@
                   <td>{{item.state == 1 ? "Activo" : "Inactivo"}}</td>
                   <td>{{item.pertenece_roles.name}}</td>
                   <td>{{item.pertecene_departamento.name}}</td>
-                  <td>{{item.deleted_at.split(" ")[0]}}</td>
+                  <td>{{item.deleted_at == null ? "Registrado sin habilitar" : item.deleted_at.split(" ")[0]}}</td>
                   <td>
                     <!-- <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i> -->
                     <i class="ti-close mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="deleted(item.id)"></i>

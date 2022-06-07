@@ -7,11 +7,21 @@
       <label for="inputText" class="sr-only">Nombre</label>
       <input v-model="register.name" type="text" id="inputUser" class="form-control text-white" placeholder="Nombre" maxlength="100" autocomplete="off" required autofocus>
 
-      <label for="inputEmail" class="sr-only">Usuario</label>
+                <select class="form-control" id="inputUser" required v-model="register.departament_id">
+                  <option disabled selected>Elija un Departamento</option>
+                  <option v-for="(departamento, index) in departamentos" :key="index" :value="departamento.id">
+                    {{departamento.name}}
+                  </option>
+                </select>
+
+      <label for="inputEmail" class="sr-only">Correo electronico</label>
       <input v-model="register.email" type="email" id="inputEmail" class="form-control text-white" placeholder="Email" maxlength="100" autocomplete="off" required>
 
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input v-model="register.password" type="password" id="inputPassword" class="form-control text-white" placeholder="Password" minlength="6" maxlength="12" autocomplete="off" required>
+      <label for="inputPassword" class="sr-only">Clave</label>
+      <input v-model="register.password" type="password" id="inputUser" class="form-control text-white" placeholder="Password" minlength="6" maxlength="12" autocomplete="off" required>
+
+      <label for="inputPassword" class="sr-only">Codigo especial</label>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Ingrese el codigo especial" minlength="6" maxlength="6" v-model="register.code" required onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
 
       <button class="btn btn-lg btn-outline-light btn-block" type="submit" v-if="loader2">Registrarme</button>
     <div class="spinner my-auto mx-auto" v-if="loader"></div>
@@ -21,6 +31,8 @@
 </template>
 
 <script>
+import axios from "axios"
+
 	export default{
 		name: 'Register',
 		data() {
@@ -29,23 +41,42 @@
 					name: '',
 					email: '',
 					password: '',
+          code: '',
+          departament_id: ''
 				},
         loader:null,
-        loader2:true
+        loader2:true,
+        departamentos: [],
+        baseURL: "http://127.0.0.1:8000/api"
 			}
 		},
+    created(){
+      try {
+        axios.get(`${this.baseURL}/departamentos/activos/register`)
+        .then(response =>{
+          // console.log(response)
+          if (response.status == 200) {
+            this.departamentos = response.data.departamento
+          }
+          console.log(this.departamentos)
+        })
+      } catch (error) {
+        alert('error')
+        console.log(error)
+      }
+    },
 		methods: {
 			async submit() {
-      const regla2 = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,12}$/;
+      const regla2 = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,12}$/;
         this.loader = true
         this.loader2 = false
         if (regla2.test(this.register.password)) {
-          await this.axios.post(`https://branditechnology.herokuapp.com/api/auth/register`, this.register)
+          axios.post(`${this.baseURL}/usuarios/register`, this.register)
           .then(response => {
             this.$swal({
               icon: 'success',
               title: 'Registro exitoso!',
-              text: 'Usuario registrado con exito!',
+              text: 'Usuario registrado con exito, solo falta la habilitacion por parte de su gerente!',
           })
             this.$router.push('/login');
           })

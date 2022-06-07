@@ -7,10 +7,10 @@
       <label for="inputText" class="sr-only">Correo electronico</label>
       <input v-model="recovery.email" type="email" id="inputUser" class="form-control text-white" placeholder="Ingrese el email" maxlength="100" autocomplete="off" required autofocus>
 
-      <label for="exampleFormControlCode">Codigo especial</label>
-      <input type="password" id="inputUser" class="form-control text-white" placeholder="Ingrese el codigo especial" minlength="6" maxlength="6" v-model="recovery.code" autocomplete="off" required onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
+      <label for="exampleFormControlCode">Clave</label>
+      <input type="password" id="inputUser" class="form-control text-white" placeholder="Ingrese su clave" minlength="8" maxlength="12" v-model="recovery.password" required autocomplete="off"/>
 
-      <button class="btn btn-lg btn-outline-light btn-block" type="submit" v-if="loader2">Recuperar Password</button>
+      <button class="btn btn-lg btn-outline-light btn-block" type="submit" v-if="loader2">Recuperar Codigo</button>
     <div class="spinner my-auto mx-auto" v-if="loader"></div>
     </div>
   </form>
@@ -21,12 +21,12 @@
 import axios from "axios"
 
 	export default{
-		name: 'Recovery',
+		name: 'Code',
 		data() {
 			return {
 				recovery: {
 					email: null,
-					code: null,
+					password: null,
 				},
         loader:null,
         loader2:true,
@@ -40,9 +40,9 @@ import axios from "axios"
         this.loader2 = false
           let info = {
             'email': this.recovery.email,
-            'code': this.recovery.code
+            'password': this.recovery.password
           }
-          axios.post(`${this.baseURL}/recovery/password/user`, info)
+          axios.post(`${this.baseURL}/recovery/code/user`, info)
           .then(response => {
             if (response.status == 200) {
               this.$swal({
@@ -58,8 +58,8 @@ import axios from "axios"
             this.$swal({title: '¡El correo no pertenece a nuestra base de datos!',text: '¡No se encontro algun usuario con el correo ingresado, valide nuevamente!',icon: 'error'})
             this.recovery.email = ''
             }
-            if (error.response.data == "El codigo es incorrecto") {
-            this.$swal({title: '¡El codigo ingresado es incorrecto!',text: '¡Valide nuevamente el codigo especial e intentelo una vez mas!',icon: 'error'})
+            if (error.response.data == "El password es incorrecto") {
+            this.$swal({title: '¡El password ingresado es incorrecto!',text: '¡Valide nuevamente el password e intentelo una vez mas!',icon: 'error'})
             this.recovery.code = ''
             }
             console.log(error.response.data)

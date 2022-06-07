@@ -35,12 +35,12 @@
                   <td class="text-center">{{item.state == 1 ? "Activo" : "Inactivo"}}</td>
                   <td class="text-center">{{item.created_at.split('T')[0]}}</td>
                   <td v-if="rol_id !== 3">
-                    <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i>
+                    <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.id, item.name)"></i>
                     <i class="ti-pencil-alt mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="update(item.id)"></i>
                     <i class="ti-trash mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="trashed(item.id)"></i>
                   </td>
                   <td v-else-if="rol_id == 3">
-                    <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i>
+                    <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.id, item.name)"></i>
                   </td>
                 </slot>
               </tr>
@@ -117,42 +117,45 @@ export default {
       //   this.datafull = false;
       // }
     },
-    async download(name) {
+    async download(id, name) {
       // try {
         this.$swal({
-          title: '¿Desea descargar el archivo actual?',
-          text: "¡Asegurate de que sea la decision correcta!",
+          title: '¿Desea descargar el proyecto actual?',
+          text: "¡Por favor elija el apartado del proyecto que desea descargar!",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: '¡Si, descargarlo!',
-          cancelButtonText: 'Volver'
+          confirmButtonText: '¡Archivos asignados!',
+          cancelButtonText: 'Contenido del proyecto'
         }).then((result) => {
           if (result.isConfirmed) {
+            sessionStorage.setItem('proy_doc',id)
+            this.$router.push('/proyect-documents')
+            }
+            else{
+              axios({
+                url: `${this.baseURL}/download/pdf/proyecto/${id}`,
+                method: 'GET',
+                headers:{"Authorization": `Bearer ${this.token}`},
+                responseType: 'blob',
+            }).then((response) => {
+                  var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                  var fileLink = document.createElement('a');
 
-            axios({
-              url: `${this.baseURL}/documentos/download/${name}`,
-              method: 'GET',
-              headers:{"Authorization": `Bearer ${this.token}`},
-              responseType: 'blob',
-          }).then((response) => {
-                var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-                var fileLink = document.createElement('a');
+                  fileLink.href = fileURL;
+                  fileLink.setAttribute('download', `${name}.pdf`);
+                  document.body.appendChild(fileLink);
 
-                fileLink.href = fileURL;
-                fileLink.setAttribute('download', `${name.split('-')[1]}`);
-                document.body.appendChild(fileLink);
-
-                fileLink.click();
-                this.$swal({
-                  position: 'top-end',
-                  icon: 'success',
-                  title: '¡Archivo descargado con exito!',
-                  showConfirmButton: false,
-                  timer: 2000
-                })
-              });
+                  fileLink.click();
+                  this.$swal({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '¡Archivo descargado con exito!',
+                    showConfirmButton: false,
+                    timer: 2000
+                  })
+                });
             }
           })
       // } catch (error) {

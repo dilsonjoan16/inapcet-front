@@ -21,6 +21,10 @@
       <router-link to="/recovery" v-if="loader2" class="text-white" id="link">
         Olvido de password
       </router-link>
+      <br>
+      <router-link to="/code" v-if="loader2" class="text-white" id="link">
+        Olvido de codigo especial
+      </router-link>
      </div>
     </form>
 </div>

@@ -29,12 +29,15 @@
           <div class="form-group col-md-6">
               <label for="exampleFormControlSelect10">Departamento Actual</label>
               <i class="ti-tag p-1" aria-hidden="true">{{user2.pertecene_departamento.name}}</i>
-              <select class="form-control" id="exampleFormControlSelect10" v-model="user.departament_id">
+              <span class="form-control">
+                {{user2.pertecene_departamento.name}}
+              </span>
+              <!-- <select class="form-control" id="exampleFormControlSelect10" v-model="user.departament_id">
                 <option disabled selected>Elija el Departamento</option>
                 <option v-for="(departamento, index) in departamentos" :key="index" :value="departamento.id">
                   {{departamento.name}}
                 </option>
-              </select>
+              </select> -->
           </div>
           <div class="col-md-3">
             <label for="password">Contraseña</label>
@@ -50,21 +53,27 @@
           <div class="form-group col-md-3">
               <label for="exampleFormControlSelect1">Rol Actual</label>
               <i class="ti-tag p-1" aria-hidden="true">{{user2.pertenece_roles.name}}</i>
-              <select class="form-control" id="exampleFormControlSelect1" v-model="user.rol_id">
+              <span class="form-control">
+                {{user2.pertenece_roles.name}}
+              </span>
+              <!-- <select class="form-control" id="exampleFormControlSelect1" v-model="user.rol_id">
                 <option disabled selected>Elija el Rol</option>
                 <option v-for="(rol, index) in roles" :key="index" :value="rol.id">
                   {{rol.name}}
                 </option>
-              </select>
+              </select> -->
           </div>
           <div class="form-group col-md-3">
               <label for="exampleFormControlSelect1">Estado Actual</label>
               <i class="ti-tag p-1" aria-hidden="true">{{user2.state == 1 ? "Activo" : "Inactivo"}}</i>
-              <select class="form-control" id="exampleFormControlSelect1" v-model="user.rol_id">
+              <span class="form-control">
+                {{user2.state == 1 ? "Activo" : "Inactivo"}}
+              </span>
+              <!-- <select class="form-control" id="exampleFormControlSelect1" v-model="user.rol_id">
                 <option disabled selected>Elija el Estado</option>
                 <option value="1">Activo</option>
                 <option value="0">Inactivo</option>
-              </select>
+              </select> -->
           </div>
           <!-- Campo para proyectos -->
           <!-- <div class="form-group col-md-6">
@@ -100,7 +109,7 @@ export default {
     return {
       baseURL: "http://127.0.0.1:8000/api",
       token: sessionStorage.getItem('token'),
-      id: sessionStorage.getItem('usid'),
+      id: sessionStorage.getItem('ui'),
       rol_id: sessionStorage.getItem('ur'),
       user: {
         name: null,
@@ -130,28 +139,28 @@ export default {
       console.log(error)
     })
 
-    axios.get(`${this.baseURL}/roles/activos`, {
-      headers:{
-        "Authorization": `Bearer ${this.token}`
-      }
+    // axios.get(`${this.baseURL}/roles/activos`, {
+    //   headers:{
+    //     "Authorization": `Bearer ${this.token}`
+    //   }
 
-    }).then(response => {
-      console.log(response.data)
-      this.roles = response.data.role;
-    }).catch(error => {
-      console.log(error)
-    })
+    // }).then(response => {
+    //   console.log(response.data)
+    //   this.roles = response.data.role;
+    // }).catch(error => {
+    //   console.log(error)
+    // })
 
-    axios.get(`${this.baseURL}/departamentos/activos`, {
-      headers:{
-        "Authorization": `Bearer ${this.token}`
-      }
-    }).then(response => {
-      console.log(response.data);
-      this.departamentos = response.data.departamento;
-    }).catch(error => {
-      console.log(error)
-    })
+    // axios.get(`${this.baseURL}/departamentos/activos`, {
+    //   headers:{
+    //     "Authorization": `Bearer ${this.token}`
+    //   }
+    // }).then(response => {
+    //   console.log(response.data);
+    //   this.departamentos = response.data.departamento;
+    // }).catch(error => {
+    //   console.log(error)
+    // })
   },
   methods: {
     updateProfile() {

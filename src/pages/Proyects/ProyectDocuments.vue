@@ -1,14 +1,13 @@
 <template>
   <div class="row">
 
-        <div class="menu my-2 mx-2" style="cursor:pointer" @click.prevent="download()">
-          <div class="subir3">
+        <div class="menu my-2 mx-2" style="cursor:pointer" @click="$router.go(-1)">
+          <div class="subir">
             <span>
-              <i class="ti-import mx-2" aria-hidden="true"></i>
-              <i class="ti-file mx-2" aria-hidden="true"></i>
+              <i class="ti-back-left" aria-hidden="true"></i>
             </span>
             <span>
-              Descargar Tabla
+              Volver atras
             </span>
           </div>
         </div>
@@ -27,16 +26,15 @@
               <tr v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index" v-for="(item, index) in data" :key="index">
                 <slot :row="item">
                   <td>{{item.id}}</td>
-                  <td>{{item.name}}</td>
+                  <td>{{item.name.split('-')[1]}}</td>
                   <td>{{item.state == 1 ? "Activo" : "Inactivo"}}</td>
+                  <td>{{item.pertenece_departamento.name}}</td>
+                  <td>{{item.pertenece_proyectos == null ? "Sin Asignar" : item.pertenece_proyectos.name}}</td>
                   <td>{{item.created_at.split('T')[0]}}</td>
-                  <td>{{item.updated_at == null ? "Sin modificar aun" : item.updated_at.split('T')[0]}}</td>
-                  <td>{{item.deleted_at == null ? "Sin eliminar aun" : item.deleted_at.split(' ')[0]}}</td>
-                  <td>{{item.restored_at == null ? "Sin restaurar aun" : item.restored_at.split(' ')[0]}}</td>
-                  <td style="cursor:pointer" v-on:click.prevent="show(item.id)">
-                    <!-- <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i> -->
-                    <i class="ti-eye" id="ver_" aria-hidden="true"></i>
-                    <i class="ti-key" aria-hidden="true"></i>
+                  <td>
+                    <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i>
+                    <!-- <i class="ti-pencil-alt mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="update(item.id)"></i>
+                    <i class="ti-trash mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="trashed(item.id)"></i> -->
                   </td>
                 </slot>
               </tr>
@@ -48,15 +46,15 @@
                 </div>
           </div>
         </card>
-                <!-- Controles -->
+        <!-- Controles -->
         <div class="row">
           <div class="col-5"></div>
           <div class="menu">
-          <div style="cursor:pointer" class="subir" v-show="pag != 1" @click.prevent="pag -= 1">
+          <div style="cursor:pointer" class="subir2" v-show="pag != 1" @click.prevent="pag -= 1">
             <span aria-hidden="true" class="ti-arrow-left"></span>
             <span>Anterior</span>
           </div>
-          <div style="cursor:pointer" class="subir2" v-show="pag * NUM_RESULTS / data.length < 1" @click.prevent="pag += 1">
+          <div style="cursor:pointer" class="subir3" v-show="pag * NUM_RESULTS / data.length < 1" @click.prevent="pag += 1">
             <span aria-hidden="true" class="ti-arrow-right mx-2"></span>
             <span>Siguiente</span>
           </div>
@@ -73,37 +71,37 @@ import { PaperTable } from "@/components";
 import axios from "axios"
 
 export default {
-  name: "DepartamentMenu",
+  name: "UploadMenu",
   components: {
     PaperTable
   },
   data() {
     return {
-      columns: ["Id", "Nombre", "Estado", "Fecha de Creacion", "Fecha de Modificacion", "Fecha de Eliminacion", "Fecha de Restauracion", "Acciones"],
+      columns: ["Id", "Nombre", "Estado", "Departamento", "Proyecto", "Fecha de Creacion", "Acciones"],
       data: [],
       token: sessionStorage.getItem('token'),
       baseURL: "http://127.0.0.1:8000/api",
-      rol_id: sessionStorage.getItem('ur'),
       // datanull: false,
       datafull: true,
       NUM_RESULTS: 10, // Numero de resultados por página
       pag: 1, // Página inicial
+      id: sessionStorage.getItem('proy_doc'),
     };
   },
   mounted(){
-    this.departamentos();
+    this.documentos();
   },
   methods:{
-    async departamentos()
+    async documentos()
     {
-      let response = await axios.get(`${this.baseURL}/usuarios/auditoria`, {
+      let response = await axios.get(`${this.baseURL}/documentos/ver/proyecto/${this.id}`, {
         headers:{
           "Authorization": `Bearer ${this.token}`
         }
       })
       console.log(response.data)
       if (response.status == 200) {
-        this.data = response.data.usuario
+        this.data = response.data.documento
       }
 
       this.data.length == 0 ? this.datafull = false : this.datafull = true;
@@ -116,8 +114,8 @@ export default {
     async download(name) {
       // try {
         this.$swal({
-          title: '¿Desea descargar toda la informacion?',
-          text: "¡Esta accion descargara un archivo excel con toda la data!",
+          title: '¿Desea descargar el archivo actual?',
+          text: "¡Asegurate de que sea la decision correcta!",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -127,11 +125,8 @@ export default {
         }).then((result) => {
           if (result.isConfirmed) {
 
-            let date = new Date();
-            let output = String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0') + '/' + date.getFullYear();
-
             axios({
-              url: `${this.baseURL}/download/excel/auditoria/usuarios`,
+              url: `${this.baseURL}/documentos/download/${name}`,
               method: 'GET',
               headers:{"Authorization": `Bearer ${this.token}`},
               responseType: 'blob',
@@ -140,7 +135,7 @@ export default {
                 var fileLink = document.createElement('a');
 
                 fileLink.href = fileURL;
-                fileLink.setAttribute('download', `Auditoria-Usuarios-INAPCET-${output}.xlsx`);
+                fileLink.setAttribute('download', `${name.split('-')[1]}`);
                 document.body.appendChild(fileLink);
 
                 fileLink.click();
@@ -158,10 +153,57 @@ export default {
       //   console.log(error);
       // }
     },
-    async show(id) {
-      sessionStorage.setItem('usaud',id)
-      this.$router.push('/show-users');
+    async update(id) {
+      this.$swal({
+          title: '¿Desea modificar el archivo actual?',
+  text: "¡Asegurate de que sea la decision correcta!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '¡Si, modificarlo!',
+  cancelButtonText: 'Volver'
+}).then((result) => {
+  if (result.isConfirmed) {
+    sessionStorage.setItem('doc',id)
+      this.$router.push('/upload-edit');
+  }
+      })
     },
+    async trashed(id) {
+      this.$swal({
+          title: '¿Desea eliminar el archivo?',
+  text: "¡Asegurate de que sea la decision correcta!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '¡Si, eliminarlo!',
+  cancelButtonText: 'Volver'
+}).then((result) => {
+  if (result.isConfirmed) {
+    try {
+      axios.get(`${this.baseURL}/documentos/desactivar/${id}`,{
+        headers:{
+          "Authorization": `Bearer ${this.token}`
+        }
+      }).then(response => {
+        console.log(response)
+        if (response.status == 200) {
+          this.$swal(
+          '¡Eliminado!',
+          'El archivo fue eliminado con exito',
+          'success'
+      )
+        window.location.reload();
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+      })
+    }
   }
 }
 
@@ -171,14 +213,14 @@ export default {
   display: flex;
   justify-content: center;
   list-style:none;
-  width: 200px;
+  width: 120px;
   background-color: #212120;
   border-radius: 25px;
 }
 .subir span:first-child{
   display: inline-block;
   padding: 10px;
-  margin-left: 40%;
+  margin-left: 20px;
 }
 .subir{
    display: block;
@@ -186,7 +228,7 @@ export default {
     overflow: hidden;
     padding: 0px 10px;
     color: white;
-    width: 180px;
+    width: 100px;
 }
 .subir span:last-child{
   position: absolute;
@@ -211,17 +253,10 @@ export default {
 #tabla{
   margin-left: 10px;
 }
-#ver_{
-  margin-left: 20px;
-}
-/* #centrado{
-  margin-left: 50%;
-  margin-right: 50%;
-} */
 .subir2 span:first-child{
   display: inline-block;
   padding: 10px;
-  padding-left: 40%;
+  margin-left: 40%;
 }
 .subir2{
    display: block;
@@ -251,11 +286,11 @@ export default {
 .subir2:hover span:last-child{
   transform: translateY(2%);
 }
-/*  */
+/* Separacion */
 .subir3 span:first-child{
   display: inline-block;
   padding: 10px;
-  margin-left: 20%;
+  padding-left: 40%;
 }
 .subir3{
    display: block;

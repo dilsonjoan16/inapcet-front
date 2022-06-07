@@ -1,17 +1,17 @@
 <template>
   <div class="row">
 
-        <!-- <div class="menu my-2 mx-2" style="cursor:pointer">
-          <router-link to="departament-form" class="subir">
+         <div class="menu my-2 mx-2" style="cursor:pointer" @click.prevent="download()">
+          <div class="subir3">
             <span>
-              <i class="ti-plus mx-2" aria-hidden="true"></i>
-              <i class="ti-home mx-2" aria-hidden="true"></i>
+              <i class="ti-import mx-2" aria-hidden="true"></i>
+              <i class="ti-file mx-2" aria-hidden="true"></i>
             </span>
             <span>
-              Crear Departamento
+              Descargar Tabla
             </span>
-          </router-link>
-        </div> -->
+          </div>
+        </div>
 
 
       <div class="col-12">
@@ -113,48 +113,51 @@ export default {
       //   this.datafull = false;
       // }
     },
-    // async download(name) {
-    //   // try {
-    //     this.$swal({
-    //       title: '¿Desea descargar el archivo actual?',
-    //       text: "¡Asegurate de que sea la decision correcta!",
-    //       icon: 'warning',
-    //       showCancelButton: true,
-    //       confirmButtonColor: '#3085d6',
-    //       cancelButtonColor: '#d33',
-    //       confirmButtonText: '¡Si, descargarlo!',
-    //       cancelButtonText: 'Volver'
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
+    async download() {
+      // try {
+        this.$swal({
+          title: '¿Desea descargar toda la informacion?',
+          text: "¡Esta accion descargara un archivo excel con toda la data!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '¡Si, descargarlo!',
+          cancelButtonText: 'Volver'
+        }).then((result) => {
+          if (result.isConfirmed) {
 
-    //         axios({
-    //           url: `${this.baseURL}/documentos/download/${name}`,
-    //           method: 'GET',
-    //           headers:{"Authorization": `Bearer ${this.token}`},
-    //           responseType: 'blob',
-    //       }).then((response) => {
-    //             var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-    //             var fileLink = document.createElement('a');
+            let date = new Date();
+            let output = String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0') + '/' + date.getFullYear();
 
-    //             fileLink.href = fileURL;
-    //             fileLink.setAttribute('download', `${name.split('-')[1]}`);
-    //             document.body.appendChild(fileLink);
+            axios({
+              url: `${this.baseURL}/download/excel/auditoria/documentos`,
+              method: 'GET',
+              headers:{"Authorization": `Bearer ${this.token}`},
+              responseType: 'blob',
+          }).then((response) => {
+                var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                var fileLink = document.createElement('a');
 
-    //             fileLink.click();
-    //             this.$swal({
-    //               position: 'top-end',
-    //               icon: 'success',
-    //               title: '¡Archivo descargado con exito!',
-    //               showConfirmButton: false,
-    //               timer: 2000
-    //             })
-    //           });
-    //         }
-    //       })
-    //   // } catch (error) {
-    //   //   console.log(error);
-    //   // }
-    // },
+                fileLink.href = fileURL;
+                fileLink.setAttribute('download', `Auditoria-Archivos-INAPCET-${output}.xlsx`);
+                document.body.appendChild(fileLink);
+
+                fileLink.click();
+                this.$swal({
+                  position: 'top-end',
+                  icon: 'success',
+                  title: '¡Archivo descargado con exito!',
+                  showConfirmButton: false,
+                  timer: 2000
+                })
+              });
+            }
+          })
+      // } catch (error) {
+      //   console.log(error);
+      // }
+    },
     async show(id) {
       sessionStorage.setItem('docaud',id)
       this.$router.push('/show-documents');
@@ -242,6 +245,40 @@ export default {
   transform: translateY(100%);
 }
 .subir2:hover span:last-child{
+  transform: translateY(2%);
+}
+/*  */
+.subir3 span:first-child{
+  display: inline-block;
+  padding: 10px;
+  margin-left: 20%;
+}
+.subir3{
+   display: block;
+    position: relative;
+    overflow: hidden;
+    padding: 0px 10px;
+    color: white;
+    width: 180px;
+}
+.subir3 span:last-child{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-100%);
+}
+.subir3 span{
+  transition: transform 0.2s ease-out;
+}
+.subir3:hover span:first-child{
+  transform: translateY(100%);
+}
+.subir3:hover span:last-child{
   transform: translateY(2%);
 }
 </style>
