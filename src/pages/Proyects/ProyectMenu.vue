@@ -1,5 +1,7 @@
 <template>
-  <div class="row">
+<div>
+
+  <div class="row" v-show="loader == false">
 
         <div class="menu my-2 mx-2" style="cursor:pointer">
           <router-link to="proyect-form" class="subir">
@@ -70,16 +72,25 @@
         <!-- Fin de Controles -->
       </div>
   </div>
+  <div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 
 <script>
 import { PaperTable } from "@/components";
 import axios from "axios"
+import Loader from "@/pages/Loaders/Loader.vue"
+
 
 export default {
   name: "UploadMenu",
   components: {
-    PaperTable
+    PaperTable,
+    Loader
   },
   data() {
     return {
@@ -91,7 +102,8 @@ export default {
       datafull: true,
       NUM_RESULTS: 10, // Numero de resultados por página
       pag: 1, // Página inicial
-      rol_id: sessionStorage.getItem('ur')
+      rol_id: sessionStorage.getItem('ur'),
+      loader: false
     };
   },
   mounted(){
@@ -100,6 +112,7 @@ export default {
   methods:{
     async proyectos()
     {
+      this.loader = true
       let response = await axios.get(`${this.baseURL}/proyectos/activos`, {
         headers:{
           "Authorization": `Bearer ${this.token}`
@@ -108,6 +121,7 @@ export default {
       console.log(response.data)
       if (response.status == 200) {
         this.data = response.data.proyecto
+        this.loader = false
       }
 
       this.data.length == 0 ? this.datafull = false : this.datafull = true;
@@ -124,8 +138,8 @@ export default {
           text: "¡Por favor elija el apartado del proyecto que desea descargar!",
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
+          confirmButtonColor: '#93291E',
+          cancelButtonColor: '#ffc44e',
           confirmButtonText: '¡Archivos asignados!',
           cancelButtonText: 'Contenido del proyecto'
         }).then((result) => {
@@ -134,6 +148,7 @@ export default {
             this.$router.push('/proyect-documents')
             }
             else{
+              this.loader = true
               axios({
                 url: `${this.baseURL}/download/pdf/proyecto/${id}`,
                 method: 'GET',
@@ -148,6 +163,7 @@ export default {
                   document.body.appendChild(fileLink);
 
                   fileLink.click();
+                  this.loader = false
                   this.$swal({
                     position: 'top-end',
                     icon: 'success',
@@ -168,8 +184,8 @@ export default {
   text: "¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: '#93291E',
+  cancelButtonColor: '#ffc44e',
   confirmButtonText: '¡Si, modificarlo!',
   cancelButtonText: 'Volver'
 }).then((result) => {
@@ -185,12 +201,13 @@ export default {
   text: "¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: '#93291E',
+  cancelButtonColor: '#ffc44e',
   confirmButtonText: '¡Si, eliminarlo!',
   cancelButtonText: 'Volver'
 }).then((result) => {
   if (result.isConfirmed) {
+    this.loader = true
     try {
       axios.get(`${this.baseURL}/proyectos/desactivar/${id}`,{
         headers:{
@@ -199,6 +216,7 @@ export default {
       }).then(response => {
         console.log(response)
         if (response.status == 200) {
+          this.loader = false
           this.$swal(
           '¡Eliminado!',
           'El archivo fue eliminado con exito',
@@ -209,6 +227,7 @@ export default {
       })
     } catch (error) {
       console.log(error)
+      this.loader = false
     }
   }
       })
@@ -223,7 +242,7 @@ export default {
   justify-content: center;
   list-style:none;
   width: 180px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{

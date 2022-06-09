@@ -1,5 +1,7 @@
 <template>
-  <div class="row">
+<div>
+
+  <div class="row" v-show="loader == false">
 
         <div v-if="rol_id == 1" class="menu my-2 mx-2" style="cursor:pointer">
           <router-link to="user-form" class="subir">
@@ -87,16 +89,24 @@
         <!-- Fin de Controles -->
       </div>
   </div>
+  <div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 
 <script>
 import { PaperTable } from "@/components";
 import axios from "axios"
+import Loader from "@/pages/Loaders/Loader.vue"
 
 export default {
   name: "UserMenu",
   components: {
-    PaperTable
+    PaperTable,
+    Loader
   },
   data() {
     return {
@@ -110,6 +120,7 @@ export default {
       rol_id: sessionStorage.getItem('ur'),
       NUM_RESULTS: 10, // Numero de resultados por página
       pag: 1, // Página inicial
+      loader: false
     };
   },
   mounted(){
@@ -118,6 +129,7 @@ export default {
   methods:{
     async usuarios()
     {
+      this.loader = true
       let response = await axios.get(`${this.baseURL}/usuarios/activos`, {
         headers:{
           "Authorization": `Bearer ${this.token}`
@@ -126,6 +138,7 @@ export default {
       // console.log(response.data.usuario)
       if (response.status == 200) {
         this.data = response.data.usuario
+        this.loader = false
       }
       console.log(this.data)
 
@@ -184,8 +197,8 @@ export default {
   text: "¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: '#93291E',
+  cancelButtonColor: '#ffc44e',
   confirmButtonText: '¡Si, modificarlo!',
   cancelButtonText: 'Volver'
 }).then((result) => {
@@ -201,12 +214,13 @@ export default {
   text: "¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: '#93291E',
+  cancelButtonColor: '#ffc44e',
   confirmButtonText: '¡Si, eliminarlo!',
   cancelButtonText: 'Volver'
 }).then((result) => {
   if (result.isConfirmed) {
+    this.loader = true
     try {
       axios.get(`${this.baseURL}/usuarios/desactivar/${id}`,{
         headers:{
@@ -215,6 +229,7 @@ export default {
       }).then(response => {
         console.log(response)
         if (response.status == 200) {
+          this.loader = false
           this.$swal(
           '¡Eliminado!',
           'El usuario fue eliminado con exito',
@@ -239,7 +254,7 @@ export default {
   justify-content: center;
   list-style:none;
   width: 180px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{

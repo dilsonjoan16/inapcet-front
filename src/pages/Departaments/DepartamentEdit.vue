@@ -1,5 +1,7 @@
 <template>
-<div class="row">
+<div>
+
+<div class="row" v-show="loader == false">
   <!--  -->
         <div class="menu my-2 mx-2" style="cursor:pointer" @click="$router.go(-1)">
           <div class="subir">
@@ -33,29 +35,39 @@
             <label for="name">Nombre del departamento actual</label>
             <i class="ti-tag p-1" aria-hidden="true">{{departamentNow.name}}</i>
             <input class="form-control" type="text" name="name" id="name" placeholder="Nuevo nombre del Departamento" v-model="departament.name">
-            
+
           </div>
 
-        <div class="col-md-4 my-4">
-          <p-button type="info"
-                    round
-                    @click.native.prevent="updateDepartament">
-            Modificar Departamento
-          </p-button>
+
+        </div>
+        <div id="boton_menu" class="my-3">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.prevent="updateDepartament">
+            MODIFICAR DEPARTAMENTO
+          </div>
         </div>
         <div class="clearfix"></div>
-        </div>
       </form>
     </div>
   </card>
+</div>
+<div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
 </div>
 </template>
 
 <script>
 import axios from "axios";
+import Loader from "@/pages/Loaders/Loader.vue"
+
 
 export default {
   name: "DepartamentEdit",
+  components:{
+    Loader
+  },
   data() {
     return {
       departament: {
@@ -70,20 +82,24 @@ export default {
       rol_id: sessionStorage.getItem('ur'),
       baseURL: "http://127.0.0.1:8000/api",
       id: sessionStorage.getItem('dep'),
+      loader: false,
     };
   },
   created(){
+    this.loader = true
     axios.get(`${this.baseURL}/departamentos/ver/${this.id}`, {
       headers:{
         'Authorization': `Bearer ${this.token}`,
       }
     }).then(response => {
       this.departamentNow = response.data.departamento
+      this.loader = false
     })
   },
   mounted(){},
   methods: {
     async updateDepartament() {
+      this.loader = true
       let info = {
         'name': this.departament.name,
         'state': this.departament.state,
@@ -98,6 +114,7 @@ export default {
         console.log(response.data)
         console.log(response.status)
         if (response.status == 200) {
+          this.loader = false
           this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -110,6 +127,7 @@ export default {
       } catch (error) {
         console.log(error)
         alert('error')
+        this.loader = false
       }
     },
   }
@@ -117,12 +135,21 @@ export default {
 </script>
 
 <style scoped>
+#boton{
+  background-color: #93291E;
+  border-radius: 25px;
+  padding: 13px;
+}
+#boton_menu{
+  display: flex;
+  justify-content: center;
+}
 .menu {
   display: flex;
   justify-content: center;
   list-style:none;
   width: 120px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{
@@ -164,7 +191,7 @@ export default {
   justify-content: center;
   list-style:none;
   width: 180px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir2 span:first-child{

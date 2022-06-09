@@ -1,7 +1,13 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">{{routeName}}</a>
+      <div class="col-3">
+              <div class="avatar">
+                <img src="@/assets/img/LogoInapcet.png" alt="Inapcet" class="rounded img-fluid">
+              </div>
+            </div>
+      <!-- <a class="navbar-brand" href="#">{{routeName}}</a> -->
+      <!-- <a class="navbar-brand" href="#">Instituto Autonomo para el Poder Comunal del Estado Tachira</a> -->
       <button class="navbar-toggler navbar-burger"
               type="button"
               @click="toggleSidebar"
@@ -13,7 +19,7 @@
       </button>
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="ti-panel"></i>
               <p>Stats</p>
@@ -28,7 +34,7 @@
             <a class="dropdown-item" href="#">Notification 3</a>
             <a class="dropdown-item" href="#">Notification 4</a>
             <a class="dropdown-item" href="#">Another notification</a>
-          </drop-down>
+          </drop-down> -->
           <li class="nav-item" @click.prevent="logout()">
             <a style="cursor:pointer" class="nav-link">
               <i class="ti-arrow-circle-left"></i>

@@ -1,5 +1,7 @@
 <template>
-  <card class="card" title="Crear Usuarios">
+<div>
+
+  <card class="card" title="Crear Usuarios" v-show="loader == false">
     <!-- <div slot="image">
       <img src="@/assets/img/prueba.png" alt="..." width="10" height="250">
     </div> -->
@@ -62,23 +64,32 @@
         </div>
 
 
-        <div class="text-center">
-          <p-button type="info"
-                    round
-                    @click.native.prevent="createUser">
-            Update Profile
-          </p-button>
+
+        <div id="boton_menu">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.prevent="createUser">
+            CREAR USUARIO
+          </div>
         </div>
         <div class="clearfix"></div>
       </form>
     </div>
   </card>
+  <div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 <script>
 
 import axios from "axios"
+import Loader from "@/pages/Loaders/Loader.vue"
 
 export default {
+  components:{
+    Loader
+  },
   data() {
     return {
       user: {
@@ -95,9 +106,11 @@ export default {
       token: sessionStorage.getItem('token'),
       baseURL: "http://127.0.0.1:8000/api",
       rol_id: sessionStorage.getItem('ur'),
+      loader: false,
     };
   },
   created(){
+    this.loader = true
     axios.get(`${this.baseURL}/departamentos/activos`, {
       headers:{
           "Authorization": `Bearer ${this.token}`
@@ -105,9 +118,10 @@ export default {
     }).then(response => {
       if (response.status == 200) {
         this.departamentos = response.data.departamento
+        this.loader = false
       }
     });
-
+this.loader = true
     axios.get(`${this.baseURL}/roles/activos`, {
       headers:{
           "Authorization": `Bearer ${this.token}`
@@ -115,12 +129,14 @@ export default {
     }).then(response => {
       if (response.status == 200) {
         this.roles = response.data.role
+        this.loader = false
       }
     });
 
   },
   methods: {
     createUser() {
+      this.loader = true
       const regla2 = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,12}$/;
       let info = {
         'name': this.user.name,
@@ -139,6 +155,7 @@ export default {
         }).then(response => {
           console.log(response.data)
           if (response.status == 201) {
+            this.loader = false
           this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -157,4 +174,13 @@ export default {
 };
 </script>
 <style>
+#boton{
+  background-color: #93291E;
+  border-radius: 25px;
+  padding: 13px;
+}
+#boton_menu{
+  display: flex;
+  justify-content: center;
+}
 </style>

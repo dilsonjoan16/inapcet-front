@@ -1,5 +1,7 @@
 <template>
-<div class="row">
+<div>
+
+<div class="row" v-show="loader == false">
   <!--  -->
         <div class="menu my-2 mx-2" style="cursor:pointer" @click="$router.go(-1)">
           <div class="subir">
@@ -167,12 +169,11 @@
 
             <div class="col-md-1"></div>
         </div>
-        <div v-show="finalizar == false" class="text-center my-4" @click.stop="finalizar = !finalizar">
-          <p-button type="info"
-                    round
-                    >
-            Validar codigo de autorizacion
-          </p-button>
+
+        <div v-show="finalizar == false" id="boton_menu" class="my-4">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.stop="finalizar = !finalizar">
+            VALIDAR CODIGO DE AUTORIZACION
+          </div>
         </div>
         <div v-show="finalizar == true" class="row my-2">
 
@@ -187,25 +188,33 @@
 
         </div>
 
-        <div v-show="finalizar == true" class="text-center my-4">
-          <p-button type="info"
-                    round
-                    @click.native.prevent="createProyect">
-            Update Profile
-          </p-button>
+        <div v-show="finalizar == true"  id="boton_menu" class="my-4">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.prevent="createProyect">
+            MODIFICAR PROYECTO
+          </div>
         </div>
         <div class="clearfix"></div>
       </form>
     </div>
   </card>
 </div>
+<div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 
 <script>
 import axios from "axios";
+import Loader from "@/pages/Loaders/Loader.vue"
 
 export default {
   name: "UploadForm",
+  components:{
+    Loader
+  },
   data() {
     return {
       proyecto: {
@@ -232,6 +241,7 @@ export default {
       estado: null,
       repetido: null,
       repetido_estado: false,
+      loader: false
     };
   },
   created(){
@@ -291,6 +301,7 @@ export default {
       this.estado = 2
     },
     async createProyect() {
+      this.loader = true
       if (this.usuarios_id == null || this.usuarios_id.length == 0) {
         this.estado = 3
       }
@@ -321,6 +332,7 @@ export default {
     }
 
       if (this.code == null) {
+        this.loader = false
       return  this.$swal({
                   position: 'top-end',
                   icon: 'warning',
@@ -330,6 +342,7 @@ export default {
                 })
       }
       if (this.code.length < 6) {
+        this.loader = false
       return  this.$swal({
                   position: 'top-end',
                   icon: 'warning',
@@ -341,6 +354,7 @@ export default {
       console.log(info)
       // console.log(info2)
       if (this.repetido_estado == false) {
+        this.loader = true
         try {
           let response = await axios.post(`${this.baseURL}/proyectos/modificar/${this.id}/${this.estado}`, info, {
             headers:{
@@ -350,6 +364,7 @@ export default {
           console.log(response.data)
           console.log(response.status)
           if (response.status == 200) {
+            this.loader = false
             this.$swal({
                     position: 'top-end',
                     icon: 'success',
@@ -361,6 +376,7 @@ export default {
           }
         } catch (error) {
           if (error.response.data.message == "compact(): Undefined variable: El codigo es incorrecto") {
+              this.loader = false
               this.$swal({
                     position: 'top-end',
                     icon: 'error',
@@ -374,6 +390,7 @@ export default {
         }
       }
       else{
+        this.loader = false
         this.$swal({
                     position: 'top-end',
                     icon: 'error',
@@ -389,12 +406,21 @@ export default {
 </script>
 
 <style scoped>
+#boton{
+  background-color: #93291E;
+  border-radius: 25px;
+  padding: 13px;
+}
+#boton_menu{
+  display: flex;
+  justify-content: center;
+}
 .menu {
   display: flex;
   justify-content: center;
   list-style:none;
   width: 120px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{
@@ -436,7 +462,7 @@ export default {
   justify-content: center;
   list-style:none;
   width: 180px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir2 span:first-child{

@@ -167,8 +167,8 @@ export default {
           text: "¡Asegurate de que sea la decision correcta!",
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
+          confirmButtonColor: '#93291E',
+          cancelButtonColor: '#ffc44e',
           confirmButtonText: '¡Si, descargarlo!',
           cancelButtonText: 'Volver'
         }).then((result) => {
@@ -208,8 +208,8 @@ export default {
   text: "¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: '#93291E',
+  cancelButtonColor: '#ffc44e',
   confirmButtonText: '¡Si, modificarlo!',
   cancelButtonText: 'Volver'
 }).then((result) => {
@@ -225,8 +225,8 @@ export default {
   text: "¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: '#93291E',
+  cancelButtonColor: '#ffc44e',
   confirmButtonText: '¡Si, eliminarlo!',
   cancelButtonText: 'Volver'
 }).then((result) => {
@@ -263,7 +263,7 @@ export default {
   justify-content: center;
   list-style:none;
   width: 120px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{

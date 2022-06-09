@@ -2,9 +2,15 @@
   <div>
 
     <!--Stats cards-->
-    <div class="row">
-      <div class="col-md-6 col-xl-3" v-for="stats in statsCards" :key="stats.title">
-        <stats-card>
+    <div class="row my-4">
+      <div class="col-md-12 col-xl-12">
+        <h1 class="titulo">
+          <i>
+          <!-- BIENVENIDO AL SISTEMA -->
+          </i>
+        </h1>
+      <!-- <div class="col-md-6 col-xl-3" v-for="stats in statsCards" :key="stats.title"> -->
+        <!-- <stats-card>
           <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
             <i :class="stats.icon"></i>
           </div>
@@ -15,15 +21,19 @@
           <div class="stats" slot="footer">
             <i :class="stats.footerIcon"></i> {{stats.footerText}}
           </div>
-        </stats-card>
+        </stats-card> -->
       </div>
     </div>
 
     <!--Charts-->
-    <div class="row">
+    <div class="row my-4">
 
       <div class="col-12">
-        <chart-card title="Users behavior"
+        <div class="avatar">
+                <img src="@/assets/img/LogoInapcet.png" alt="Inapcet" class="rounded img-fluid">
+              </div>
+
+        <!-- <chart-card title="Users behavior"
                     sub-title="24 Hours performance"
                     :chart-data="usersChart.data"
                     :chart-options="usersChart.options">
@@ -35,10 +45,10 @@
             <i class="fa fa-circle text-danger"></i> Click
             <i class="fa fa-circle text-warning"></i> Click Second Time
           </div>
-        </chart-card>
+        </chart-card> -->
       </div>
 
-      <div class="col-md-6 col-12">
+      <!-- <div class="col-md-6 col-12">
         <chart-card title="Email Statistics"
                     sub-title="Last campaign performance"
                     :chart-data="preferencesChart.data"
@@ -51,9 +61,9 @@
             <i class="fa fa-circle text-warning"></i> Unsubscribe
           </div>
         </chart-card>
-      </div>
+      </div> -->
 
-      <div class="col-md-6 col-12">
+      <!-- <div class="col-md-6 col-12">
         <chart-card title="2015 Sales"
                     sub-title="All products including Taxes"
                     :chart-data="activityChart.data"
@@ -66,7 +76,7 @@
             <i class="fa fa-circle text-warning"></i> BMW 5 Series
           </div>
         </chart-card>
-      </div>
+      </div> -->
 
     </div>
 
@@ -192,5 +202,8 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
+.titulo{
+  margin: 0px 25%;
+}
 </style>

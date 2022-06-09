@@ -1,5 +1,7 @@
 <template>
-  <card class="card" title="Edit Profile">
+<div>
+
+  <card class="card" title="Edit Profile" v-show="loader == false">
     <div class="menu my-2 mx-2" style="cursor:pointer" @click="$router.go(-1)">
           <div class="subir">
             <span>
@@ -14,12 +16,12 @@
       <form @submit.prevent>
         <div class="row">
           <div class="col-md-6">
-            <label for="nombre">Nombre Actual</label>
+            <label class="text-dark" for="nombre">Nombre Actual</label>
             <i class="ti-tag p-1" aria-hidden="true">{{user2.name}}</i>
             <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese el nombre" v-model="user.name" maxlength="50">
           </div>
           <div class="col-md-6">
-            <label for="nombre">Correo Actual</label>
+            <label class="text-dark" for="nombre">Correo Actual</label>
             <i class="ti-tag p-1" aria-hidden="true">{{user2.email}}</i>
             <input class="form-control" type="email" name="email" id="email" placeholder="Ingrese el correo" v-model="user.email" maxlength="80">
           </div>
@@ -27,7 +29,7 @@
 
         <div class="row">
           <div class="form-group col-md-6">
-              <label for="exampleFormControlSelect10">Departamento Actual</label>
+              <label class="text-dark" for="exampleFormControlSelect10">Departamento Actual</label>
               <i class="ti-tag p-1" aria-hidden="true">{{user2.pertecene_departamento.name}}</i>
               <select class="form-control" id="exampleFormControlSelect10" v-model="user.departament_id">
                 <option disabled selected>Elija el Departamento</option>
@@ -37,18 +39,18 @@
               </select>
           </div>
           <div class="col-md-3">
-            <label for="password">Contraseña</label>
+            <label class="text-dark" for="password">Contraseña</label>
             <input type="password" class="form-control" name="password" id="password" minlength="8" maxlength="12" placeholder="Ingrese la contraseña" v-model="user.password">
           </div>
           <div class="col-md-3">
-            <label for="nombre">Codigo Especial</label>
+            <label class="text-dark" for="nombre">Codigo Especial</label>
             <input type="password" id="code" class="form-control" placeholder="Ingrese el codigo especial" minlength="6" maxlength="6" v-model="user.code" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-md-3">
-              <label for="exampleFormControlSelect1">Rol Actual</label>
+              <label class="text-dark" for="exampleFormControlSelect1">Rol Actual</label>
               <i class="ti-tag p-1" aria-hidden="true">{{user2.pertenece_roles.name}}</i>
               <select class="form-control" id="exampleFormControlSelect1" v-model="user.rol_id">
                 <option disabled selected>Elija el Rol</option>
@@ -58,7 +60,7 @@
               </select>
           </div>
           <div class="form-group col-md-3">
-              <label for="exampleFormControlSelect1">Estado Actual</label>
+              <label class="text-dark" for="exampleFormControlSelect1">Estado Actual</label>
               <i class="ti-tag p-1" aria-hidden="true">{{user2.state == 1 ? "Activo" : "Inactivo"}}</i>
               <select class="form-control" id="exampleFormControlSelect1" v-model="user.rol_id">
                 <option disabled selected>Elija el Estado</option>
@@ -79,23 +81,32 @@
           </div> -->
         </div>
 
-        <div class="text-center">
-          <p-button type="info"
-                    round
-                    @click.native.prevent="updateProfile">
-            Update Profile
-          </p-button>
+
+        <div id="boton_menu">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.prevent="updateProfile">
+            MODIFICAR USUARIO
+          </div>
         </div>
         <div class="clearfix"></div>
       </form>
     </div>
   </card>
+  <div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 <script>
 
 import axios from "axios"
+import Loader from "@/pages/Loaders/Loader.vue"
 
 export default {
+  components:{
+    Loader
+  },
   data() {
     return {
       baseURL: "http://127.0.0.1:8000/api",
@@ -114,9 +125,11 @@ export default {
       user2: [],
       roles: [],
       departamentos: [],
+      loader: false,
     };
   },
   created(){
+    this.loader = true
     axios.get(`${this.baseURL}/usuarios/ver/${this.id}`, {
       headers:{
         "Authorization": `Bearer ${this.token}`
@@ -125,11 +138,11 @@ export default {
       console.log(response.data.usuario)
       if (response.status == 200) {
         this.user2 = response.data.usuario;
+        this.loader = false
       }
     }).catch(error => {
       console.log(error)
     })
-
     axios.get(`${this.baseURL}/roles/activos`, {
       headers:{
         "Authorization": `Bearer ${this.token}`
@@ -155,6 +168,7 @@ export default {
   },
   methods: {
     updateProfile() {
+      this.loader = true
       const regla2 = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,12}$/;
       let info = {
         "name": this.user.name,
@@ -176,6 +190,7 @@ export default {
           }).then(response => {
             console.log(response.data)
           if (response.status == 201) {
+            this.loader = false
           this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -191,6 +206,7 @@ export default {
         }
       }
       else{
+        this.loader = true
         axios.put(`${this.baseURL}/usuarios/modificar/${this.id}`, info, {
             headers:{
               "Authorization": `Bearer ${this.token}`
@@ -198,6 +214,7 @@ export default {
           }).then(response => {
             console.log(response.data)
           if (response.status == 200) {
+            this.loader = false
           this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -216,12 +233,21 @@ export default {
 };
 </script>
 <style scoped>
+#boton{
+  background-color: #93291E;
+  border-radius: 25px;
+  padding: 13px;
+}
+#boton_menu{
+  display: flex;
+  justify-content: center;
+}
 .menu {
   display: flex;
   justify-content: center;
   list-style:none;
   width: 120px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{

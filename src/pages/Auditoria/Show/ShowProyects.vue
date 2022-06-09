@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="menu my-2 mx-2" style="cursor:pointer" @click="$router.go(-1)">
+  <div v-show="loader == false" class="menu my-2 mx-2" style="cursor:pointer" @click="$router.go(-1)">
           <div class="subir">
             <span>
               <i class="ti-back-left" aria-hidden="true"></i>
@@ -10,7 +10,7 @@
             </span>
           </div>
         </div>
-  <card class="card" title="Auditar Proyecto">
+  <card v-show="loader == false" class="card" title="Auditar Proyecto">
     <!-- <div slot="image">
       <img src="@/assets/img/prueba.png" alt="..." width="10" height="250">
     </div> -->
@@ -211,13 +211,23 @@
       </form>
     </div>
   </card>
+  <div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
 </div>
 </template>
 <script>
 
 import axios from "axios"
+import Loader from "@/pages/Loaders/Loader.vue"
+
 
 export default {
+  components:{
+    Loader
+  },
   data() {
     return {
       proyecto: [],
@@ -227,9 +237,11 @@ export default {
       baseURL: "http://127.0.0.1:8000/api",
       rol_id: sessionStorage.getItem('ur'),
       id: sessionStorage.getItem('proyaud'),
+      loader: false
     };
   },
   created(){
+    this.loader = true
     axios.get(`${this.baseURL}/proyectos/ver/${this.id}`, {
       headers:{
           "Authorization": `Bearer ${this.token}`
@@ -240,6 +252,7 @@ export default {
         response.data.proyecto.map(r => {
           this.proyecto = r
         })
+        this.loader = false
       }
       this.proyecto.tiene_usuarios.length > 0 ? this.user_state = true : this.user_state = false
       this.proyecto.tiene_multimedia.length > 0 ? this.document_state = true : this.document_state = false
@@ -256,7 +269,7 @@ export default {
   justify-content: center;
   list-style:none;
   width: 120px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{
@@ -293,7 +306,7 @@ export default {
   transform: translateY(2%);
 }
 .contorno{
-  outline: thick double #ce3232;
+  outline: thick double #93291E;
   border-radius: 15px;
   padding: 10px;
 }

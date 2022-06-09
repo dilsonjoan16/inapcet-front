@@ -1,32 +1,41 @@
 <template>
 <div class="contenedor">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <img src="@/assets/img/LogoInapcet.png" alt="logo inapcet" id="imago" class="img-fluid">
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
  	<form class="form-signin my-auto mx-auto" @submit.stop.prevent="submit">
-    <div class="container p-4">
+    <div class="container">
+    <card class="card2" title="Inicio de sesion">
       <h1 class="h3 mb-3 font-weight-normal text-center"></h1>
       <label for="inputEmail" class="sr-only">Email address</label>
-      <input v-model="login.email" type="email" id="inputEmail" class="form-control text-white" placeholder="Ingrese el email" maxlength="100" required autocomplete="off" autofocus>
+      <input v-model="login.email" type="email" id="inputEmail" class="form-control text-dark" placeholder="Ingrese el email" maxlength="100" required autocomplete="off" autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
-      <input v-model="login.password" type="password" id="inputPassword" class="form-control text-white" placeholder="Ingrese el password" minlength="6" maxlength="12" autocomplete="off" required>
+      <input v-model="login.password" type="password" id="inputPassword" class="form-control text-dark" placeholder="Ingrese el password" minlength="6" maxlength="12" autocomplete="off" required>
 
-      <p v-if="error" class="error text-white">Has introducido mal el email o la contraseña.</p>
+      <p v-if="error" class="error text-dark">Has introducido mal el email o la contraseña.</p>
 
-      <button class="btn btn-lg btn-outline-light btn-block" type="submit" v-if="loader2">Ingresar</button>
+      <button class="btn btn-lg btn-outline-dark btn-block" type="submit" v-if="loader2">Ingresar</button>
       <br>
       <hr class="division">
     <div class="spinner my-auto mx-auto" v-if="loader"></div>
-      <router-link to="/register" v-if="loader2" class="text-white" id="link">
+      <router-link to="/register" v-if="loader2" class="text-dark" id="link">
         Registrarme
       </router-link>
       <br>
-      <router-link to="/recovery" v-if="loader2" class="text-white" id="link">
+      <router-link to="/recovery" v-if="loader2" class="text-dark" id="link">
         Olvido de password
       </router-link>
       <br>
-      <router-link to="/code" v-if="loader2" class="text-white" id="link">
+      <router-link to="/code" v-if="loader2" class="text-dark" id="link">
         Olvido de codigo especial
       </router-link>
+    </card>
      </div>
     </form>
+    </div>
+  </div>
 </div>
 </template>
 
@@ -225,7 +234,10 @@ import axios from "axios";
 </script>
 
 <style scoped>
-
+#imago{
+  margin: 20% 0px;
+  margin-left: 10%;
+}
 	.form-signin {
   width: 100%;
   max-width: 330px;
@@ -256,11 +268,12 @@ import axios from "axios";
   border-top-right-radius: 0;
 }
 .contenedor{
-background: #212120 !important;
+/* background: #FFD57E !important; */
+background: #FFFFFF !important;
 /* background: -webkit-linear-gradient(to right, #ffffff, #F4F3EF) !important; */
 /* background: linear-gradient(to right, #ffffff, #F4F3EF) !important; */
-height: 110%;
-width: 100%;
+height: 100% !important;
+width: 100% !important;
 }
 .container{
   margin-top: 50%;
@@ -272,26 +285,26 @@ width: 100%;
 background: none;
 }
 #inputEmail::placeholder{
-  color:white;
+  color:black;
 }
 #inputPassword{
 background: none;
 }
 #inputPassword::placeholder{
-  color:white;
+  color:black;
 }
 #link{
   text-decoration: none;
 }
 .division {
-    background-color: white !important;
+    background-color: black !important;
   }
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: #ffffff;
+  border-left-color: #000000;
   animation: spin 1s ease infinite;
 }
 @keyframes spin {

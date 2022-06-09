@@ -1,5 +1,8 @@
 <template>
-<div class="row">
+<div>
+
+
+<div class="row" v-show="loader == false">
   <!--  -->
         <div class="menu my-2 mx-2" style="cursor:pointer" @click="$router.go(-1)">
           <div class="subir">
@@ -28,22 +31,28 @@
 
         </div>
 
-        <div class="text-center my-2">
-          <p-button type="info"
-                    round
-                    @click.native.prevent="deleteDepartament">
-            Update Profile
-          </p-button>
+        <div id="boton_menu">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.prevent="deleteDepartament">
+            ELIMINAR DEPARTAMENTO
+          </div>
         </div>
         <div class="clearfix"></div>
       </form>
     </div>
   </card>
 </div>
+<div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 
 <script>
 import axios from "axios";
+import Loader from "@/pages/Loaders/Loader.vue"
+
 
 export default {
   name: "DepartamentTrashedForm",
@@ -53,6 +62,7 @@ export default {
       token: sessionStorage.getItem('token'),
       id: sessionStorage.getItem('dep_del'),
       baseURL: "http://127.0.0.1:8000/api",
+      loader: false
     };
   },
   created(){},
@@ -64,13 +74,13 @@ export default {
   text: "Recuerde que esta opcion elimina por completo el registro de su sistema y no hay forma de recuperarlo una vez sea eliminado ¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: '#93291E',
+  cancelButtonColor: '#ffc44e',
   confirmButtonText: '¡Si, eliminarlo!',
   cancelButtonText: 'Volver'
 }).then((result) => {
   if (result.isConfirmed) {
-
+this.loader = true
     console.log(this.code)
     let code = {
       'code':this.code
@@ -84,6 +94,7 @@ export default {
         console.log(response.data)
         console.log(response.status)
         if (response.status == 200) {
+          this.loader = false
           this.$swal({
                 position: 'top-end',
                 icon: 'success',
@@ -96,6 +107,7 @@ export default {
       }).catch(error => {
         console.log(error.response.data.message)
           if (error.response.data.message == "compact(): Undefined variable: Eliminacion completa") {
+            this.loader = false
             this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -108,6 +120,7 @@ export default {
             // window.location.reload();
           }
           if (error.response.data.message == "compact(): Undefined variable: El codigo es incorrecto") {
+            this.loader = false
             this.$swal({
                   position: 'top-end',
                   icon: 'error',
@@ -119,6 +132,7 @@ export default {
             this.code = null
           }
           if (error.response.data.message == "compact(): Undefined variable: Necesita ingresar el codigo") {
+            this.loader = false
             this.$swal({
                   position: 'top-end',
                   icon: 'warning',
@@ -134,6 +148,7 @@ export default {
     } catch (error) {
       console.log(error)
       alert('error')
+      this.loader = false
     }
   }
       })
@@ -143,12 +158,21 @@ export default {
 </script>
 
 <style scoped>
+#boton{
+  background-color: #93291E;
+  border-radius: 25px;
+  padding: 13px;
+}
+#boton_menu{
+  display: flex;
+  justify-content: center;
+}
 .menu {
   display: flex;
   justify-content: center;
   list-style:none;
   width: 120px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{
@@ -190,7 +214,7 @@ export default {
   justify-content: center;
   list-style:none;
   width: 180px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir2 span:first-child{

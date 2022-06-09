@@ -130,7 +130,7 @@
     @include sidebar-background-color($white-background-color, $default-color);
   }
   &[data-background-color="black"] {
-    @include sidebar-background-color($black-background-color, $white-color);
+    @include sidebar-background-color($red-2, $white-color);
   }
   &[data-background-color="darkblue"] {
     @include sidebar-background-color($darkblue-background-color, $white-color);
@@ -143,7 +143,8 @@
     @include sidebar-active-color($info-color);
   }
   &[data-active-color="success"] {
-    @include sidebar-active-color($success-color);
+    // @include sidebar-active-color($success-color);
+    @include sidebar-active-color($warning-color);
   }
   &[data-active-color="warning"] {
     @include sidebar-active-color($warning-color);
@@ -155,7 +156,8 @@
 }
 
 .main-panel {
-  background-color: $bg-nude;
+  // background-color: $bg-nude;
+  background-color: $nav-beige;
   position: relative;
   z-index: 2;
   float: right;

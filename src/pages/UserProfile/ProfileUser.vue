@@ -1,5 +1,7 @@
 <template>
-  <card class="card" title="Edit Profile">
+<div>
+
+  <card class="card" title="Edit Profile" v-show="loader == false">
     <div class="menu my-2 mx-2" style="cursor:pointer" @click="$router.go(-1)">
           <div class="subir">
             <span>
@@ -88,23 +90,31 @@
           </div> -->
         </div>
 
-        <div class="text-center">
-          <p-button type="info"
-                    round
-                    @click.native.prevent="updateProfile">
-            Update Profile
-          </p-button>
+        <div id="boton_menu">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.prevent="updateProfile">
+            MODIFICAR PERFIL
+          </div>
         </div>
         <div class="clearfix"></div>
       </form>
     </div>
   </card>
+  <div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 <script>
 
 import axios from "axios"
+import Loader from "@/pages/Loaders/Loader.vue"
 
 export default {
+  components:{
+    Loader
+  },
   data() {
     return {
       baseURL: "http://127.0.0.1:8000/api",
@@ -123,9 +133,11 @@ export default {
       user2: [],
       roles: [],
       departamentos: [],
+      loader: false
     };
   },
   created(){
+    this.loader = true
     axios.get(`${this.baseURL}/usuarios/ver/${this.id}`, {
       headers:{
         "Authorization": `Bearer ${this.token}`
@@ -134,6 +146,7 @@ export default {
       console.log(response.data.usuario)
       if (response.status == 200) {
         this.user2 = response.data.usuario;
+        this.loader = false
       }
     }).catch(error => {
       console.log(error)
@@ -164,6 +177,7 @@ export default {
   },
   methods: {
     updateProfile() {
+      this.loader = true
       const regla2 = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,12}$/;
       let info = {
         "name": this.user.name,
@@ -185,6 +199,7 @@ export default {
           }).then(response => {
             console.log(response.data)
           if (response.status == 201) {
+            this.loader = false
           this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -200,6 +215,7 @@ export default {
         }
       }
       else{
+        this.loader = true
         axios.put(`${this.baseURL}/usuarios/modificar/${this.id}`, info, {
             headers:{
               "Authorization": `Bearer ${this.token}`
@@ -207,6 +223,7 @@ export default {
           }).then(response => {
             console.log(response.data)
           if (response.status == 200) {
+            this.loader = false
           this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -225,12 +242,21 @@ export default {
 };
 </script>
 <style scoped>
+#boton{
+  background-color: #93291E;
+  border-radius: 25px;
+  padding: 13px;
+}
+#boton_menu{
+  display: flex;
+  justify-content: center;
+}
 .menu {
   display: flex;
   justify-content: center;
   list-style:none;
   width: 120px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{

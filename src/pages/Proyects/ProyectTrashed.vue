@@ -1,5 +1,7 @@
 <template>
-  <div class="row">
+<div>
+
+  <div class="row" v-show="loader == false">
 
         <!-- <div class="menu my-2 mx-2" style="cursor:pointer">
           <router-link to="proyect-form" class="subir">
@@ -95,12 +97,10 @@
 
         </div>
 
-        <div class="text-center my-2">
-          <p-button type="info"
-                    round
-                    @click.native.prevent="deletedProyect">
-            Eliminar Proyecto
-          </p-button>
+        <div id="boton_menu">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.prevent="deletedProyect">
+            ELIMINAR PROYECTO
+          </div>
         </div>
         <div class="clearfix"></div>
       </form>
@@ -109,16 +109,25 @@
 </div>
 
   </div>
+  <div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 
 <script>
 import { PaperTable } from "@/components";
 import axios from "axios"
+import Loader from "@/pages/Loaders/Loader.vue"
+
 
 export default {
   name: "UploadMenu",
   components: {
-    PaperTable
+    PaperTable,
+    Loader
   },
   data() {
     return {
@@ -133,6 +142,7 @@ export default {
       restaurar: false,
       id: null,
       code: null,
+      loader: false
     };
   },
   mounted(){
@@ -141,6 +151,7 @@ export default {
   methods:{
     async proyectos()
     {
+      this.loader = true
       let response = await axios.get(`${this.baseURL}/proyectos/inactivos`, {
         headers:{
           "Authorization": `Bearer ${this.token}`
@@ -149,6 +160,7 @@ export default {
       console.log(response.data)
       if (response.status == 200) {
         this.data = response.data.proyecto
+        this.loader = false
       }
 
       this.data.length == 0 ? this.datafull = false : this.datafull = true;
@@ -165,13 +177,13 @@ export default {
           text: "¡Asegurate de que sea la decision correcta!",
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
+          confirmButtonColor: '#93291E',
+          cancelButtonColor: '#ffc44e',
           confirmButtonText: '¡Si, descargarlo!',
           cancelButtonText: 'Volver'
         }).then((result) => {
           if (result.isConfirmed) {
-
+this.loader = true
             axios({
               url: `${this.baseURL}/documentos/download/${name}`,
               method: 'GET',
@@ -186,6 +198,7 @@ export default {
                 document.body.appendChild(fileLink);
 
                 fileLink.click();
+                this.loader = false
                 this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -210,12 +223,13 @@ export default {
   text: "Recuerde que esta opcion elimina por completo el registro de su sistema y no hay forma de recuperarlo una vez sea eliminado ¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: '#93291E',
+  cancelButtonColor: '#ffc44e',
   confirmButtonText: '¡Si, eliminarlo!',
   cancelButtonText: 'Volver'
 }).then((result) => {
   if (result.isConfirmed) {
+    this.loader = true
     let code = {
       'code': this.code
     }
@@ -227,6 +241,7 @@ export default {
           console.log(response.data)
           console.log(response.status)
           if (response.status == 200) {
+            this.loader = false
             this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -241,6 +256,7 @@ export default {
         }).catch(error => {
           console.log(error.response.data.message)
           if (error.response.data.message == "compact(): Undefined variable: Eliminacion completa") {
+            this.loader = false
             this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -253,6 +269,7 @@ export default {
             window.location.reload();
           }
           if (error.response.data.message == "compact(): Undefined variable: El codigo es incorrecto") {
+            this.loader = false
             this.$swal({
                   position: 'top-end',
                   icon: 'error',
@@ -264,6 +281,7 @@ export default {
             this.code = null
           }
           if (error.response.data.message == "compact(): Undefined variable: Necesita ingresar el codigo") {
+            this.loader = false
             this.$swal({
                   position: 'top-end',
                   icon: 'warning',
@@ -285,12 +303,13 @@ export default {
   text: "¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: '#93291E',
+  cancelButtonColor: '#ffc44e',
   confirmButtonText: '¡Si, restaurarlo!',
   cancelButtonText: 'Volver'
 }).then((result) => {
   if (result.isConfirmed) {
+    this.loader = true
     try {
       axios.get(`${this.baseURL}/proyectos/activar/${id}`,{
         headers:{
@@ -299,6 +318,7 @@ export default {
       }).then(response => {
         console.log(response)
         if (response.status == 200) {
+          this.loader = false
           this.$swal(
           '¡Restaurado!',
           'El proyecto fue restaurado con exito',
@@ -318,12 +338,21 @@ export default {
 
 </script>
 <style scoped>
+#boton{
+  background-color: #93291E;
+  border-radius: 25px;
+  padding: 13px;
+}
+#boton_menu{
+  display: flex;
+  justify-content: center;
+}
 .menu {
   display: flex;
   justify-content: center;
   list-style:none;
   width: 180px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{

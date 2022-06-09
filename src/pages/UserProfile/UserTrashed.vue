@@ -1,5 +1,7 @@
 <template>
-  <div class="row">
+<div>
+
+  <div class="row" v-show="loader == false">
 
          <!-- <div v-if="rol_id == 1" class="menu my-2 mx-2" style="cursor:pointer">
           <div v-on:click.prevent="restoreAll()" class="subir">
@@ -100,16 +102,24 @@
         <!-- Fin de Controles -->
       </div>
   </div>
+  <div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 
 <script>
 import { PaperTable } from "@/components";
 import axios from "axios"
+import Loader from "@/pages/Loaders/Loader.vue"
 
 export default {
   name: "UserTrashed",
   components: {
-    PaperTable
+    PaperTable,
+    Loader
   },
   data() {
     return {
@@ -123,6 +133,7 @@ export default {
       datafull: true,
       NUM_RESULTS: 10, // Numero de resultados por página
       pag: 1, // Página inicial
+      loader: false,
     };
   },
   mounted(){
@@ -131,6 +142,7 @@ export default {
   methods:{
     async usuarios()
     {
+      this.loader = true
       let response = await axios.get(`${this.baseURL}/usuarios/inactivos`, {
         headers:{
           "Authorization": `Bearer ${this.token}`
@@ -139,6 +151,7 @@ export default {
       console.log(response.data)
       if (response.status == 200) {
         this.data = response.data.usuario
+        this.loader = false
       }
 
       this.data.length == 0 ? this.datafull = false : this.datafull = true;
@@ -186,12 +199,13 @@ export default {
   text: "¡Asegurate de que sea la decision correcta!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: '#93291E',
+  cancelButtonColor: '#ffc44e',
   confirmButtonText: '¡Si, restaurarlo!',
   cancelButtonText: 'Volver'
 }).then((result) => {
   if (result.isConfirmed) {
+    this.loader = true
     try {
       axios.get(`${this.baseURL}/usuarios/activar/${id}`,{
         headers:{
@@ -200,6 +214,7 @@ export default {
       }).then(response => {
         console.log(response)
         if (response.status == 200) {
+          this.loader = false
           this.$swal(
           '¡Restaurado!',
           'El usuario fue restaurado con exito',
@@ -222,8 +237,8 @@ export default {
     text: "¡Asegurate de que sea la decision correcta!",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
+    confirmButtonColor: '#93291E',
+    cancelButtonColor: '#ffc44e',
     confirmButtonText: '¡Si, restaurarlos!',
     cancelButtonText: 'Volver'
   }).then((result) => {
@@ -259,8 +274,8 @@ export default {
     text: "¡Asegurate de que sea la decision correcta!",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
+    confirmButtonColor: '#93291E',
+    cancelButtonColor: '#ffc44e',
     confirmButtonText: '¡Si, restaurarlos!',
     cancelButtonText: 'Volver'
   }).then((result) => {
@@ -298,7 +313,7 @@ export default {
   justify-content: center;
   list-style:none;
   width: 230px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{

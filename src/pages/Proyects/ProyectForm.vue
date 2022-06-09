@@ -1,5 +1,7 @@
 <template>
-<div class="row">
+<div>
+
+<div class="row" v-show="loader == false">
   <!--  -->
         <div class="menu my-2 mx-2" style="cursor:pointer" @click="$router.go(-1)">
           <div class="subir">
@@ -31,12 +33,12 @@
           <div class="row">
 
           <div class="col-md-5">
-            <label for="nombre">Nombre del Proyecto</label>
+            <label class="text-dark" for="nombre">Nombre del Proyecto</label>
             <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese el nombre" maxlength="255" required v-model="proyecto.name">
           </div>
 
           <div class="col-md-7">
-            <label for="descripcion">Descripcion del Proyecto</label>
+            <label class="text-dark" for="descripcion">Descripcion del Proyecto</label>
             <textarea class="form-control" name="descripcion" id="descripcion" rows="3" maxlength="255" placeholder="Ingrese la descripcion del proyecto" required v-model="proyecto.description"></textarea>
           </div>
           </div>
@@ -47,16 +49,16 @@
           <div class="row">
 
           <div class="col-md-4">
-            <label for="duracion">Duracion aproximada en semanas del Proyecto</label>
+            <label class="text-dark" for="duracion">Duracion aproximada en semanas del Proyecto</label>
             <input type="text" class="form-control" name="duracion" id="duracion" minlength="1" maxlength="3" min="1" max="520" placeholder="Ingrese las semanas estimadas" onkeypress='return event.charCode >= 48 && event.charCode <= 57' v-model="proyecto.duration">
           </div>
           <div class="col-md-4">
-            <label for="estimacion">Estimacion Presupuestaria del Proyecto</label>
+            <label class="text-dark" for="estimacion">Estimacion Presupuestaria del Proyecto</label>
             <input type="text" class="form-control" name="estimacion" id="estimacion" minlength="1" maxlength="12" min="1" placeholder="Ingrese el presupuesto estimado" onkeypress='return event.charCode >= 48 && event.charCode <= 57' v-model="proyecto.estimated">
           </div>
 
           <div class="col-md-4">
-            <label for="etapa">Etapa del Proyecto</label>
+            <label class="text-dark" for="etapa">Etapa del Proyecto</label>
             <select class="form-control" name="etapa" id="etapa" required v-model="proyecto.stage">
               <option disabled selected>Elija la etapa actual del proyecto</option>
               <option value="En Conversacion">En Conversacion</option>
@@ -79,19 +81,18 @@
               </div>
             </div>
         </div>
-        <div v-show="finalizar == false" class="text-center my-4" @click.stop="finalizar = !finalizar">
-          <p-button type="info"
-                    round
-                    >
-            Validar codigo de autorizacion
-          </p-button>
+
+        <div v-show="finalizar == false" id="boton_menu" class="my-4">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.stop="finalizar = !finalizar">
+            VALIDAR CODIGO DE AUTORIZACION
+          </div>
         </div>
         <div v-show="finalizar == true" class="row my-2">
 
           <div class="col-md-3"></div>
 
           <div class="col-md-6">
-            <label for="nombre">Codigo Especial</label>
+            <label class="text-dark" for="nombre">Codigo Especial</label>
             <input type="password" id="code" class="form-control" placeholder="Ingrese el codigo especial" minlength="6" maxlength="6" v-model="code" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required/>
           </div>
 
@@ -99,25 +100,34 @@
 
         </div>
 
-        <div v-show="finalizar == true" class="text-center my-4">
-          <p-button type="info"
-                    round
-                    @click.native.prevent="createProyect">
-            Update Profile
-          </p-button>
+        <div v-show="finalizar == true" id="boton_menu" class="my-4">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.prevent="createProyect">
+            CREAR PROYECTO
+          </div>
         </div>
         <div class="clearfix"></div>
       </form>
     </div>
   </card>
 </div>
+<div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 
 <script>
 import axios from "axios";
+import Loader from "@/pages/Loaders/Loader.vue"
+
 
 export default {
   name: "UploadForm",
+  components:{
+    Loader
+  },
   data() {
     return {
       proyecto: {
@@ -137,6 +147,7 @@ export default {
       rol_id: sessionStorage.getItem('ur'),
       baseURL: "http://127.0.0.1:8000/api",
       finalizar: false,
+      loader: false
     };
   },
   created(){
@@ -169,6 +180,7 @@ export default {
 
     },
     async createProyect() {
+      this.loader = true
       let info = {
         'name': this.proyecto.name,
         'description': this.proyecto.description,
@@ -180,6 +192,7 @@ export default {
         'code': Number(this.code)
       }
       if (info.name == null || info.description == null || info.stage == null) {
+      this.loader = false
       return  this.$swal({
                   position: 'top-end',
                   icon: 'warning',
@@ -189,6 +202,7 @@ export default {
                 })
       }
       if (this.code == null) {
+        this.loader = false
       return  this.$swal({
                   position: 'top-end',
                   icon: 'warning',
@@ -198,6 +212,7 @@ export default {
                 })
       }
       if (this.code.length < 6) {
+        this.loader = false
       return  this.$swal({
                   position: 'top-end',
                   icon: 'warning',
@@ -208,6 +223,7 @@ export default {
       }
       console.log(info)
       try {
+        this.loader = true
         let response = await axios.post(`${this.baseURL}/proyectos/crear`, info, {
           headers:{
               'Authorization': `Bearer ${this.token}`,
@@ -216,6 +232,7 @@ export default {
         console.log(response.data)
         console.log(response.status)
         if (response.status == 201) {
+          this.loader = false
           this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -227,6 +244,7 @@ export default {
         }
       } catch (error) {
         if (error.response.data.message == "compact(): Undefined variable: El codigo es incorrecto") {
+            this.loader = false
             this.$swal({
                   position: 'top-end',
                   icon: 'error',
@@ -244,12 +262,21 @@ export default {
 </script>
 
 <style scoped>
+#boton{
+  background-color: #93291E;
+  border-radius: 25px;
+  padding: 13px;
+}
+#boton_menu{
+  display: flex;
+  justify-content: center;
+}
 .menu {
   display: flex;
   justify-content: center;
   list-style:none;
   width: 120px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir span:first-child{
@@ -291,7 +318,7 @@ export default {
   justify-content: center;
   list-style:none;
   width: 180px;
-  background-color: #212120;
+  background-color: #93291E;
   border-radius: 25px;
 }
 .subir2 span:first-child{
