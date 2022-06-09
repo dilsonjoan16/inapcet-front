@@ -134,7 +134,7 @@ export default {
       columns: ['Id del Proyecto','Nombre del Proyecto','Descripcion del Proyecto','Duracion (Semanas)','Presupuesto (Bs)','Etapa del Proyecto','Estado del Proyecto', "Fecha de eliminacion", "Acciones"],
       data: [],
       token: sessionStorage.getItem('token'),
-      baseURL: "http://127.0.0.1:8000/api",
+      baseURL: "https://shielded-hollows-48102.herokuapp.com/api",
       // datanull: false,
       datafull: true,
       NUM_RESULTS: 10, // Numero de resultados por página

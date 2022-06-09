@@ -101,7 +101,8 @@ const routes = [
       {
         path: "upload-menu",
         name: "upload-menu",
-        component: UploadMenu
+        component: UploadMenu,
+        beforeEnter: Guard.rolA
       },
       {
         path: "upload-form",
@@ -116,7 +117,8 @@ const routes = [
       {
         path: "upload-trashed",
         name: "upload-trashed",
-        component: UploadTrashed
+        component: UploadTrashed,
+    beforeEnter: Guard.rolB
       },
       {
         path: "upload-single",
@@ -131,32 +133,38 @@ const routes = [
       {
         path: "upload-trashed-form",
         name: "upload-trashed-form",
-        component: UploadTrashedForm
+        component: UploadTrashedForm,
+    beforeEnter: Guard.rolA
       },
       {
         path: "departament-menu",
         name: "departament-menu",
-        component: DepartamentMenu
+        component: DepartamentMenu,
+    beforeEnter: Guard.rolA
       },
       {
         path: "departament-form",
         name: "departament-form",
-        component: DepartamentForm
+        component: DepartamentForm,
+    beforeEnter: Guard.rolA
       },
       {
         path: "departament-edit",
         name: "departament-edit",
-        component: DepartamentEdit
+        component: DepartamentEdit,
+    beforeEnter: Guard.rolA
       },
       {
         path: "departament-trashed",
         name: "departament-trashed",
-        component: DepartamentTrashed
+        component: DepartamentTrashed,
+    beforeEnter: Guard.rolA
       },
       {
         path: "departament-trashed-form",
         name: "departament-trashed-form",
-        component: DepartamentTrashedForm
+        component: DepartamentTrashedForm,
+    beforeEnter: Guard.rolA
       },
       {
         path: "proyect-menu",
@@ -186,7 +194,8 @@ const routes = [
       {
         path: "user-menu",
         name: "user-menu",
-        component: UserMenu
+        component: UserMenu,
+    beforeEnter: Guard.rolB
       },
       {
         path: "user-form",
@@ -201,12 +210,14 @@ const routes = [
       {
         path: "user-trashed",
         name: "user-trashed",
-        component: UserTrashed
+        component: UserTrashed,
+    beforeEnter: Guard.rolB
       },
       {
         path: "user-trashed-form",
         name: "user-trashed-form",
-        component: UserTrashedForm
+        component: UserTrashedForm,
+    beforeEnter: Guard.rolA
       },
       {
         path: "profile-user",

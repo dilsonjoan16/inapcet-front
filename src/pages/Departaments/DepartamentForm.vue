@@ -82,7 +82,7 @@ export default {
       documento: null,
       varial: false,
       rol_id: sessionStorage.getItem('ur'),
-      baseURL: "http://127.0.0.1:8000/api",
+      baseURL: "https://shielded-hollows-48102.herokuapp.com/api",
       loader: false,
     };
   },

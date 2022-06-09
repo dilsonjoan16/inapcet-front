@@ -113,7 +113,7 @@ export default {
       departamentos: [],
       roles: [],
       token: sessionStorage.getItem('token'),
-      baseURL: "http://127.0.0.1:8000/api",
+      baseURL: "https://shielded-hollows-48102.herokuapp.com/api",
       rol_id: sessionStorage.getItem('ur'),
       loader: false,
     };

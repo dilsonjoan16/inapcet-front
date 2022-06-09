@@ -54,7 +54,7 @@ import axios from "axios";
 				error: false,
         loader:null,
         loader2:true,
-        baseURL: "http://127.0.0.1:8000/api",
+        baseURL: "https://shielded-hollows-48102.herokuapp.com/api",
 			}
 		},
 		// created() {

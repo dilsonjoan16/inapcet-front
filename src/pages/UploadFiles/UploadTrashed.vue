@@ -124,7 +124,7 @@ export default {
       columns2: ["Id", "Nombre", "Estado", "Proyecto", "Acciones"],
       data: [],
       token: sessionStorage.getItem('token'),
-      baseURL: "http://127.0.0.1:8000/api",
+      baseURL: "https://shielded-hollows-48102.herokuapp.com/api",
       rol_id: sessionStorage.getItem('ur'),
       // datanull: false,
       datafull: true,
@@ -161,7 +161,7 @@ export default {
     // async download(name) {
     //   // try {
     //     axios({
-    //                 url: `http://127.0.0.1:8000/api/documentos/download/${name}`,
+    //                 url: `https://shielded-hollows-48102.herokuapp.com/api/documentos/download/${name}`,
     //                 method: 'GET',
     //                 headers:{"Authorization": `Bearer ${this.token}`},
     //                 responseType: 'blob',

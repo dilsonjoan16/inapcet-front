@@ -7,18 +7,32 @@ export default {
 		next();
 	},
 
-	rolC(to, from, next) {
-		const rol = sessionStorage.getItem('rol');
-		if(rol == "Comun"){
-			next('/modulo-modalidad-comun');
+	rolA(to, from, next) {
+		const rol = sessionStorage.getItem('ur');
+		if(rol !== 1){
+      this.$swal({
+        position: 'top-end',
+        icon: 'info',
+        title: '¡Alto ahi! No posee los permisos suficientes para acceder a esta ruta',
+        showConfirmButton: false,
+        timer: 2500
+      })
+			this.$router.go(0);
 		}
 		next();
 	},
 
-	rolA(to, from, next) {
-		const rol = sessionStorage.getItem('rol');
-		if(rol == "Admin"){
-			next('/modalidad-cursos');
+	rolB(to, from, next) {
+		const rol = sessionStorage.getItem('ur');
+		if(rol !== 2 || rol !== 1){
+			this.$swal({
+        position: 'top-end',
+        icon: 'info',
+        title: '¡Alto ahi! No posee los permisos suficientes para acceder a esta ruta',
+        showConfirmButton: false,
+        timer: 2500
+      })
+			this.$router.go(0);
 		}
 		next();
 	}

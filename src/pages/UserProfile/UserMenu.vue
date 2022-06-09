@@ -114,7 +114,7 @@ export default {
       columns2: ["Id", "Nombre", "Estado", "Rol", "Fecha de Creacion", "Acciones"],
       data: [],
       token: sessionStorage.getItem('token'),
-      baseURL: "http://127.0.0.1:8000/api",
+      baseURL: "https://shielded-hollows-48102.herokuapp.com/api",
       // datanull: false,
       datafull: true,
       rol_id: sessionStorage.getItem('ur'),

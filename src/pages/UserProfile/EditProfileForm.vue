@@ -109,7 +109,7 @@ export default {
   },
   data() {
     return {
-      baseURL: "http://127.0.0.1:8000/api",
+      baseURL: "https://shielded-hollows-48102.herokuapp.com/api",
       token: sessionStorage.getItem('token'),
       id: sessionStorage.getItem('usid'),
       rol_id: sessionStorage.getItem('ur'),
