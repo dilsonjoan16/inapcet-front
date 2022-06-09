@@ -1,6 +1,15 @@
 <template>
 <div>
-
+  <div v-show="loader == false" class="menu my-2 mx-2" style="cursor:pointer" @click="$router.go(-1)">
+          <div class="subir">
+            <span>
+              <i class="ti-back-left" aria-hidden="true"></i>
+            </span>
+            <span>
+              Volver atras
+            </span>
+          </div>
+        </div>
   <card class="card" title="Crear Usuarios" v-show="loader == false">
     <!-- <div slot="image">
       <img src="@/assets/img/prueba.png" alt="..." width="10" height="250">
@@ -182,5 +191,46 @@ this.loader = true
 #boton_menu{
   display: flex;
   justify-content: center;
+}
+.menu {
+  display: flex;
+  justify-content: center;
+  list-style:none;
+  width: 120px;
+  background-color: #93291E;
+  border-radius: 25px;
+}
+.subir span:first-child{
+  display: inline-block;
+  padding: 10px;
+  margin-left: 20px;
+}
+.subir{
+   display: block;
+    position: relative;
+    overflow: hidden;
+    padding: 0px 10px;
+    color: white;
+    width: 100px;
+}
+.subir span:last-child{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-100%);
+}
+.subir span{
+  transition: transform 0.2s ease-out;
+}
+.subir:hover span:first-child{
+  transform: translateY(100%);
+}
+.subir:hover span:last-child{
+  transform: translateY(2%);
 }
 </style>

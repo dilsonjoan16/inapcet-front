@@ -142,7 +142,9 @@ export default {
       restaurar: false,
       id: null,
       code: null,
-      loader: false
+      loader: false,
+      rol_id: sessionStorage.getItem('ur'),
+
     };
   },
   mounted(){

@@ -119,9 +119,9 @@ import axios from "axios";
                 this.loader2 = true
               }
             } else {
-              if (response.data.usuario.rol_id == 2) {
+              if (response.data.usuario.rol_id == 2 || response.data.usuario.rol_id == 3) {
                 if (response.data.usuario.state == 1) {
-              this.$router.push('/stats')
+              this.$router.push('/dashboard')
 
               const Toast = this.$swal.mixin({
               toast: true,
@@ -137,7 +137,7 @@ import axios from "axios";
 
             Toast.fire({
               icon: 'success',
-              title: '¡Que bien tenerte de vuelta'+response.data.usuario.name+'!'
+              title: '¡Que bien tenerte de vuelta '+response.data.usuario.name+'!'
             })
 
                 } else {

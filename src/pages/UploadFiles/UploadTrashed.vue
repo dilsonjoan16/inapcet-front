@@ -30,7 +30,7 @@
       <div class="col-12">
         <card class="card-plain">
           <div class="table-full-width table-responsive">
-           <table class="table-hover col-12" id="tabla">
+           <table v-if="rol_id == 1" class="table-hover col-12" id="tabla">
             <thead>
               <slot name="columns">
                 <th v-for="column in columns" :key="column">{{column}}</th>
@@ -45,7 +45,29 @@
                   <td>{{item.pertenece_departamento.name}}</td>
                   <td>
                     <!-- <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i> -->
-                    <i class="ti-close mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="deleted(item.id)"></i>
+                    <i v-if="rol_id == 1" class="ti-close mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="deleted(item.id)"></i>
+                    <i class="ti-reload mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="restore(item.id)"></i>
+                  </td>
+                </slot>
+              </tr>
+            </tbody>
+          </table>
+          <table v-else class="table-hover col-12" id="tabla">
+            <thead>
+              <slot name="columns">
+                <th v-for="column in columns2" :key="column">{{column}}</th>
+              </slot>
+            </thead>
+            <tbody v-show="datafull == true">
+              <tr v-show="(pag - 1) * NUM_RESULTS <= index  && pag * NUM_RESULTS > index" v-for="(item, index) in data" :key="index">
+                <slot :row="item">
+                  <td>{{item.id}}</td>
+                  <td>{{item.name.split('-')[1]}}</td>
+                  <td>{{item.state == 1 ? "Activo" : "Inactivo"}}</td>
+                  <td>{{item.pertenece_proyectos == null ? "Sin asignar" : item.pertenece_proyectos.name}}</td>
+                  <td>
+                    <!-- <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i> -->
+                    <i v-if="rol_id == 1" class="ti-close mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="deleted(item.id)"></i>
                     <i class="ti-reload mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="restore(item.id)"></i>
                   </td>
                 </slot>
@@ -99,6 +121,7 @@ export default {
   data() {
     return {
       columns: ["Id", "Nombre", "Estado", "Departamento", "Acciones"],
+      columns2: ["Id", "Nombre", "Estado", "Proyecto", "Acciones"],
       data: [],
       token: sessionStorage.getItem('token'),
       baseURL: "http://127.0.0.1:8000/api",

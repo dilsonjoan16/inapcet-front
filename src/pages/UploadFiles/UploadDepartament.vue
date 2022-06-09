@@ -1,5 +1,8 @@
 <template>
-  <div class="row">
+<div>
+
+
+  <div class="row" v-show="loader == false">
 
         <!-- <div class="menu my-2 mx-2" style="cursor:pointer">
           <router-link to="upload-form" class="subir">
@@ -81,8 +84,8 @@
                   <td>{{item.pertenece_proyectos == null ? "Sin asignar" : item.pertenece_proyectos.name}}</td>
                   <td>
                     <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i>
-                    <i class="ti-pencil-alt mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="update(item.id)"></i>
-                    <i class="ti-trash mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="trashed(item.id)"></i>
+                    <i v-if="rol_id == 1 || rol_id == 2" class="ti-pencil-alt mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="update(item.id)"></i>
+                    <i v-if="rol_id == 1 || rol_id == 2" class="ti-trash mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="trashed(item.id)"></i>
                   </td>
                 </slot>
               </tr>
@@ -112,16 +115,24 @@
         <!-- Fin de Controles -->
       </div>
   </div>
+  <div class="row" v-show="loader == true">
+  <div class="col-4"></div>
+  <Loader />
+  <div class="col-4"></div>
+</div>
+</div>
 </template>
 
 <script>
 import { PaperTable } from "@/components";
 import axios from "axios"
+import Loader from "@/pages/Loaders/Loader.vue"
 
 export default {
   name: "UploadDepartament",
   components: {
-    PaperTable
+    PaperTable,
+    Loader
   },
   data() {
     return {
@@ -135,6 +146,7 @@ export default {
       datafull: true,
       NUM_RESULTS: 10, // Numero de resultados por página
       pag: 1, // Página inicial
+      loader: false
     };
   },
   mounted(){
@@ -143,6 +155,7 @@ export default {
   methods:{
     async documentos()
     {
+      this.loader = true
       let response = await axios.get(`${this.baseURL}/documentos/activos/departamentos`, {
         headers:{
           "Authorization": `Bearer ${this.token}`
@@ -151,6 +164,7 @@ export default {
       console.log(response.data)
       if (response.status == 200) {
         this.data = response.data.documento
+        this.loader = false
       }
 
       this.data.length == 0 ? this.datafull = false : this.datafull = true;
@@ -173,7 +187,7 @@ export default {
           cancelButtonText: 'Volver'
         }).then((result) => {
           if (result.isConfirmed) {
-
+this.loader = true
             axios({
               url: `${this.baseURL}/documentos/download/${name}`,
               method: 'GET',
@@ -188,6 +202,7 @@ export default {
                 document.body.appendChild(fileLink);
 
                 fileLink.click();
+                this.loader = false
                 this.$swal({
                   position: 'top-end',
                   icon: 'success',
@@ -231,6 +246,7 @@ export default {
   cancelButtonText: 'Volver'
 }).then((result) => {
   if (result.isConfirmed) {
+    this.loader = true
     try {
       axios.get(`${this.baseURL}/documentos/desactivar/${id}`,{
         headers:{
@@ -239,6 +255,7 @@ export default {
       }).then(response => {
         console.log(response)
         if (response.status == 200) {
+          this.loader = false
           this.$swal(
           '¡Eliminado!',
           'El archivo fue eliminado con exito',
@@ -249,6 +266,7 @@ export default {
       })
     } catch (error) {
       console.log(error)
+      this.loader = false
     }
   }
       })

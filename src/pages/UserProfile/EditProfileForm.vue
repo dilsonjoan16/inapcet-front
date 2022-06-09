@@ -218,7 +218,7 @@ export default {
           this.$swal({
                   position: 'top-end',
                   icon: 'success',
-                  title: '¡Usuario creado con exito!',
+                  title: '¡Usuario modificado con exito!',
                   showConfirmButton: false,
                   timer: 2500
                 })

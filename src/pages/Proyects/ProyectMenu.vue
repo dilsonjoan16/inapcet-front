@@ -36,13 +36,10 @@
                   <td class="text-center">{{item.stage}}</td>
                   <td class="text-center">{{item.state == 1 ? "Activo" : "Inactivo"}}</td>
                   <td class="text-center">{{item.created_at.split('T')[0]}}</td>
-                  <td v-if="rol_id !== 3">
-                    <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.id, item.name)"></i>
-                    <i class="ti-pencil-alt mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="update(item.id)"></i>
-                    <i class="ti-trash mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="trashed(item.id)"></i>
-                  </td>
-                  <td v-else-if="rol_id == 3">
-                    <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.id, item.name)"></i>
+                  <td>
+                    <i v-if="rol_id == 3" class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.id, item.name)"></i>
+                    <i v-if="rol_id == 1 || rol_id == 2" class="ti-pencil-alt mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="update(item.id)"></i>
+                    <i v-if="rol_id == 1 || rol_id == 2" class="ti-trash mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="trashed(item.id)"></i>
                   </td>
                 </slot>
               </tr>

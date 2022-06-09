@@ -84,8 +84,8 @@ export default {
       text: "¡Asegurate de que sea la decision correcta!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#93291E',
+      cancelButtonColor: '#ffc44e',
       confirmButtonText: '¡Si, cerrarla!',
       cancelButtonText: 'Volver'
     }).then((result) => {
