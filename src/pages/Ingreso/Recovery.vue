@@ -169,7 +169,7 @@ background: none;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: #ffffff;
+  border-left-color: #000000;
   animation: spin 1s ease infinite;
 }
 @keyframes spin {
