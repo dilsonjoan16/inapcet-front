@@ -54,6 +54,8 @@ import Register from "@/pages/Ingreso/Register.vue";
 import Recovery from "@/pages/Ingreso/Recovery.vue";
 import Code from "@/pages/Ingreso/Code.vue";
 
+import Emails from "@/pages/Emails/Emails.vue";
+
 // Midleware de seguridad
 import Guard from "@/services/auth.js";
 
@@ -118,7 +120,7 @@ const routes = [
         path: "upload-trashed",
         name: "upload-trashed",
         component: UploadTrashed,
-    
+
       },
       {
         path: "upload-single",
@@ -195,7 +197,7 @@ const routes = [
         path: "user-menu",
         name: "user-menu",
         component: UserMenu,
-    
+
       },
       {
         path: "user-form",
@@ -211,7 +213,7 @@ const routes = [
         path: "user-trashed",
         name: "user-trashed",
         component: UserTrashed,
-    
+
       },
       {
         path: "user-trashed-form",
@@ -264,6 +266,11 @@ const routes = [
         name: "show-users",
         component: ShowUsers
       },
+      {
+        path: "emails",
+        name: "emails",
+        component: Emails
+      }
 
     ],
     beforeEnter: Guard.auth

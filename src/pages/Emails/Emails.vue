@@ -13,65 +13,47 @@
             </span>
           </div>
         </div>
-        <div class="col-8"></div>
-        <div class="menu2 my-2" style="cursor:pointer" @click.stop="mostrar = !mostrar">
+        <!-- <div class="col-8"></div> -->
+        <!-- <div class="menu2 my-2" style="cursor:pointer" @click.stop="mostrar = !mostrar">
           <div class="subir2">
             <span>
-              <i class="ti-plus p-1" aria-hidden="true"></i>
-              <i class="ti-user p-1" aria-hidden="true"></i>
               <i class="ti-ruler-pencil p-1" aria-hidden="true"></i>
+              <i class="ti-clipboard p-1" aria-hidden="true"></i>
             </span>
             <span>
-              Anexar Usuarios
+              Anexar a Proyecto
             </span>
           </div>
-        </div>
+        </div> -->
   <!--  -->
-<card class="card col-12" title="Creacion de Proyecto">
+<card class="card col-12" title="Mensaje de Difusion Interno">
     <div>
       <form @submit.prevent>
-          <div class="row">
-
-          <div class="col-md-5">
-            <label class="text-dark" for="nombre">Nombre del Proyecto</label>
-            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese el nombre" maxlength="255" required v-model="proyecto.name">
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <label for="title" class="text-dark">Titulo del Correo electronico</label>
+            <input class="form-control" type="text" name="title" id="title" maxlength="150" v-model="email.title" placeholder="Ingrese el titulo del mensaje" required>
           </div>
+          <div class="col-md-2"></div>
 
-          <div class="col-md-7">
-            <label class="text-dark" for="descripcion">Descripcion del Proyecto</label>
-            <textarea class="form-control" name="descripcion" id="descripcion" rows="3" maxlength="255" placeholder="Ingrese la descripcion del proyecto" required v-model="proyecto.description"></textarea>
-          </div>
-          </div>
-          <div class="row">
+        </div>
 
-
-          </div>
-          <div class="row">
-
-          <div class="col-md-4">
-            <label class="text-dark" for="duracion">Duracion aproximada en semanas del Proyecto</label>
-            <input type="text" class="form-control" name="duracion" id="duracion" minlength="1" maxlength="3" min="1" max="520" placeholder="Ingrese las semanas estimadas" onkeypress='return event.charCode >= 48 && event.charCode <= 57' v-model="proyecto.duration">
-          </div>
-          <div class="col-md-4">
-            <label class="text-dark" for="estimacion">Estimacion Presupuestaria del Proyecto</label>
-            <input type="text" class="form-control" name="estimacion" id="estimacion" minlength="1" maxlength="12" min="1" placeholder="Ingrese el presupuesto estimado" onkeypress='return event.charCode >= 48 && event.charCode <= 57' v-model="proyecto.estimated">
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <label class="text-dark" for="body">Cuerpo del Correo electronico</label>
+            <textarea class="form-control" name="body" id="body" rows="10" maxlength="1000" placeholder="Ingrese el contenido del mensaje" v-model="email.body"></textarea>
           </div>
 
-          <div class="col-md-4">
-            <label class="text-dark" for="etapa">Etapa del Proyecto</label>
-            <select class="form-control" name="etapa" id="etapa" required v-model="proyecto.stage">
-              <option disabled selected>Elija la etapa actual del proyecto</option>
-              <option value="En Conversacion">En Conversacion</option>
-              <option value="Aprobado sin planificar">Aprobado sin planificar</option>
-              <option value="En Planificacion">En Planificacion</option>
-              <option value="Planificado sin entregar">Planificado sin entregar</option>
-              <option value="Entregado y culminado">Entregado y culminado</option>
-            </select>
-          </div>
-    </div>
-        <div class="row" v-show="mostrar == true">
-          <div class="col-md-4 mx-3">
-              <label class="my-3 text-dark" for="nombre">Posibles candidatos para el proyecto</label>
+          <div class="col-md-2"></div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8 mx-3">
+              <label class="my-3 text-dark" for="nombre">Usuarios Activos</label>
               <div id="tabla" class="contorno">
                 <table>
                   <tr v-for="(usuario, index) in usuarios" :key="index" class="interno">
@@ -80,29 +62,39 @@
                 </table>
               </div>
             </div>
+          <div class="col-md-2"></div>
         </div>
 
-        <div v-show="finalizar == false" id="boton_menu" class="my-4">
-          <div id="boton" class="text-white" style="cursor:pointer" @click.stop="finalizar = !finalizar">
-            VALIDAR CODIGO DE AUTORIZACION
+      <span class="my-3" id="boton_menu">
+        <div class="menu2" v-show="visual == false">
+          <div id="boton" class="subir2 text-white" style="cursor:pointer" @click.prevent="visual=!visual">
+            <span>
+              VALIDAR CODIGO <i class="ti-lock" aria-hidden="true"></i>
+            </span>
+            <span>
+              VALIDAR CODIGO <i class="ti-unlock" aria-hidden="true"></i>
+            </span>
           </div>
         </div>
-        <div v-show="finalizar == true" class="row my-2">
+      </span>
 
-          <div class="col-md-3"></div>
-
-          <div class="col-md-6">
-            <label class="text-dark" for="nombre">Codigo Especial</label>
+        <div class="row" v-show="visual == true">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <label class="text-dark" for="body">Codigo especial</label>
             <input type="password" id="code" class="form-control" placeholder="Ingrese el codigo especial" minlength="6" maxlength="6" v-model="code" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required/>
           </div>
 
-          <div class="col-md-3"></div>
+          <div class="col-md-2"></div>
 
         </div>
 
-        <div v-show="finalizar == true" id="boton_menu" class="my-4">
-          <div id="boton" class="text-white" style="cursor:pointer" @click.prevent="createProyect">
-            CREAR PROYECTO
+        <div class="my-3" id="boton_menu" v-show="visual == true">
+          <div id="boton" class="text-white" style="cursor:pointer" @click.prevent="createDepartament">
+            REALIZAR EL ANUNCIO
+            <span>
+              <i class="ti-announcement" aria-hidden="true"></i>
+            </span>
           </div>
         </div>
         <div class="clearfix"></div>
@@ -122,38 +114,41 @@
 import axios from "axios";
 import Loader from "@/pages/Loaders/Loader.vue"
 
-
 export default {
-  name: "UploadForm",
+  name: "DepartamentForm",
   components:{
     Loader
   },
   data() {
     return {
-      proyecto: {
-        name: null,
-        description: null,
-        duration: null,
-        estimated: null,
-        stage: null,
-        state: 1,
+      email: {
+        title: null,
+        body: null,
       },
       mostrar: false,
       token: sessionStorage.getItem('token'),
-      usuarios: [],
-      usuarios_id: [],
-      code: null,
+      departamentos: [],
+      proyectos: [],
+      documento: null,
       varial: false,
       rol_id: sessionStorage.getItem('ur'),
       baseURL: "https://shielded-hollows-48102.herokuapp.com/api",
-      finalizar: false,
-      loader: false
+      loader: false,
+      visual: false,
+      usuarios: [],
+      usuarios_id: [],
+      code: null,
     };
   },
   created(){
+    this.usuarios_email();
+  },
+  mounted(){},
+  methods: {
 
+    async usuarios_email() {
       try {
-        axios.get(`${this.baseURL}/usuarios/activos/proyectos`, {
+        axios.get(`${this.baseURL}/usuarios/activos`, {
           headers:{
             "Authorization": `Bearer ${this.token}`
           }
@@ -168,38 +163,14 @@ export default {
         alert('error')
         console.log(error)
       }
-
-  },
-  mounted(){},
-  methods: {
-    guardedFile(event) {
-      const file = event.target.files[0];
-      this.documento = file;
-      this.varial = true;
-      console.log(this.documento);
-
     },
-    async createProyect() {
+    async createDepartament() {
       this.loader = true
       let info = {
-        'name': this.proyecto.name,
-        'description': this.proyecto.description,
-        'duration': Number(this.proyecto.duration),
-        'estimated': Number(this.proyecto.estimated),
-        'stage': this.proyecto.stage,
-        'state': 1,
-        'participantes': this.usuarios_id,
-        'code': Number(this.code)
-      }
-      if (info.name == null || info.description == null || info.stage == null) {
-      this.loader = false
-      return  this.$swal({
-                  position: 'top-end',
-                  icon: 'warning',
-                  title: '¡Los campos "Nombre", "Descripcion" y "Etapa" del proyecto no pueden estar vacios!',
-                  showConfirmButton: false,
-                  timer: 3000
-                })
+        'title': this.email.title,
+        'body': this.email.body,
+        'code': this.code,
+        'usuarios': this.usuarios_id
       }
       if (this.code == null) {
         this.loader = false
@@ -224,19 +195,19 @@ export default {
       console.log(info)
       try {
         this.loader = true
-        let response = await axios.post(`${this.baseURL}/proyectos/crear`, info, {
+        let response = await axios.post(`${this.baseURL}/emails/anuncio`, info, {
           headers:{
               'Authorization': `Bearer ${this.token}`,
             }
         })
         console.log(response.data)
         console.log(response.status)
-        if (response.status == 201) {
+        if (response.status == 200) {
           this.loader = false
           this.$swal({
                   position: 'top-end',
                   icon: 'success',
-                  title: '¡Proyecto creado con exito!',
+                  title: '¡Anuncio enviado con exito!',
                   showConfirmButton: false,
                   timer: 2500
                 })
@@ -317,14 +288,14 @@ export default {
   display: flex;
   justify-content: center;
   list-style:none;
-  width: 180px;
+  width: 200px;
   background-color: #93291E;
   border-radius: 25px;
 }
 .subir2 span:first-child{
   display: inline-block;
-  padding: 10px;
-  margin-left: 20px;
+  /* padding: 10px; */
+  margin-left: 10px;
 }
 .subir2{
    display: block;
@@ -332,7 +303,7 @@ export default {
     overflow: hidden;
     padding: 0px 10px;
     color: white;
-    width: 150px;
+    width: 190px;
 }
 .subir2 span:last-child{
   position: absolute;
@@ -343,13 +314,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateY(-100%);
+  transform: translateY(-150%);
 }
 .subir2 span{
   transition: transform 0.2s ease-out;
 }
 .subir2:hover span:first-child{
-  transform: translateY(100%);
+  transform: translateY(150%);
 }
 .subir2:hover span:last-child{
   transform: translateY(2%);

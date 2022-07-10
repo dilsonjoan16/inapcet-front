@@ -37,7 +37,7 @@
                   <td class="text-center">{{item.state == 1 ? "Activo" : "Inactivo"}}</td>
                   <td class="text-center">{{item.created_at.split('T')[0]}}</td>
                   <td>
-                    <i v-if="rol_id == 3" class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.id, item.name)"></i>
+                    <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.id, item.name)"></i>
                     <i v-if="rol_id == 1 || rol_id == 2" class="ti-pencil-alt mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="update(item.id)"></i>
                     <i v-if="rol_id == 1 || rol_id == 2" class="ti-trash mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="trashed(item.id)"></i>
                   </td>
@@ -134,17 +134,21 @@ export default {
           title: '¿Desea descargar el proyecto actual?',
           text: "¡Por favor elija el apartado del proyecto que desea descargar!",
           icon: 'warning',
+          showDenyButton: true,
           showCancelButton: true,
           confirmButtonColor: '#93291E',
-          cancelButtonColor: '#ffc44e',
+          cancelButtonColor: '#282C34',
+          denyButtonColor: '#ffc44e',
           confirmButtonText: '¡Archivos asignados!',
-          cancelButtonText: 'Contenido del proyecto'
+          cancelButtonText: 'Volver',
+          denyButtonText: `Contenido del proyecto`,
         }).then((result) => {
           if (result.isConfirmed) {
             sessionStorage.setItem('proy_doc',id)
             this.$router.push('/proyect-documents')
             }
-            else{
+            else if(result.isDenied){
+
               this.loader = true
               axios({
                 url: `${this.baseURL}/download/pdf/proyecto/${id}`,
@@ -169,6 +173,9 @@ export default {
                     timer: 2000
                   })
                 });
+
+            }
+            else{
             }
           })
       // } catch (error) {

@@ -68,7 +68,7 @@
                   <td>{{item.name}}</td>
                   <td>{{item.state == 1 ? "Activo" : "Inactivo"}}</td>
                   <td>{{item.pertenece_roles.name}}</td>
-                  <td>{{item.deleted_at.split(" ")[0]}}</td>
+                  <td>{{item.deleted_at == null ? "Sin eliminar aun" : item.deleted_at.split(" ")[0]}}</td>
                   <td>
                     <!-- <i class="ti-download mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="download(item.name)"></i> -->
                     <i v-if="rol_id == 1" class="ti-close mx-2" style="cursor:pointer" aria-hidden="true" v-on:click.prevent="deleted(item.id)"></i>

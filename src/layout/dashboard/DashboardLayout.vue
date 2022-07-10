@@ -11,6 +11,7 @@
 
 
         <sidebar-link to="/dashboard" name="Inicio" icon="ti-direction-alt"/>
+        <sidebar-link to="/emails" name="Anunciar" icon="ti-email"/>
         <sidebar-link to="/profile-user" name="Perfil" icon="ti-user"/>
         <sidebar-link v-if="rol_id == 1" to="/upload-menu" name="Menu de archivos" icon="ti-package"/>
         <sidebar-link to="/upload-single" name="Escritorio de archivos" icon="ti-folder"/>
